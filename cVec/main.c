@@ -79,30 +79,29 @@ void vec_insert(Vector* vec, int value, size_t position)
 int vec_remove(Vector* vec, int value)
 {
 	Node* prevNode = NULL;
-	Node* iNode = vec->start;
-	while (iNode != NULL)
+	Node* currentNode = vec->start;
+
+	while (currentNode != NULL)
 	{
-		if (iNode->data == value)
+		if (currentNode->data == value)
 		{
 			if (prevNode == NULL)
 			{
-				vec->start = iNode->next;
+				vec->start = currentNode->next;
 			}
 			else
 			{
-				prevNode->next = iNode->next;
+				prevNode->next = currentNode->next;
 			}
 
-			int data = iNode->data;
-			_vec_delete_node(iNode);
-
+			int data = currentNode->data;
+			_vec_delete_node(currentNode);
 			vec->size--;
-			
 			return data;			
 		}
 
-		prevNode = iNode;
-		iNode = iNode->next;
+		prevNode = currentNode;
+		currentNode = currentNode->next;
 	}
 }
 
