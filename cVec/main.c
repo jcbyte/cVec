@@ -7,7 +7,7 @@ typedef struct {
 } Node;
 
 typedef struct {
-	Node* start;
+	Node* _start;
 	size_t size;
 } Vector;
 
@@ -40,17 +40,27 @@ Node* _vec_get_node_forward(Node* node, size_t forward)
 	return forwardNode;
 }
 
-void vec_push(Vector* vec, int value)
+void vec_push_front(Vector* vec, int value)
+{
+	Node* newNode = _vec_create_node(value);
+
+	newNode->next = vec->_start;
+	vec->_start = newNode;
+
+	vec->size++;
+}
+
+void vec_push_back(Vector* vec, int value)
 {
 	Node* newNode = _vec_create_node(value);
 
 	if (vec->size == 0)
 	{
-		vec->start = newNode;
+		vec->_start = newNode;
 	}
 	else
 	{
-		Node* lastNode = _vec_get_node_forward(vec->start, vec->size - 1);
+		Node* lastNode = _vec_get_node_forward(vec->_start, vec->size - 1);
 		lastNode->next = newNode;
 	}
 
@@ -68,12 +78,12 @@ void vec_insert(Vector* vec, int value, size_t position)
 
 	if (position == 0)
 	{
-		newNode->next = vec->start;
-		vec->start = newNode;
+		newNode->next = vec->_start;
+		vec->_start = newNode;
 	}
 	else
 	{
-		Node* nodeAt = _vec_get_node_forward(vec->start, position);
+		Node* nodeAt = _vec_get_node_forward(vec->_start, position);
 		newNode->next = nodeAt->next;
 		nodeAt->next = newNode;
 	}
@@ -84,7 +94,7 @@ void vec_insert(Vector* vec, int value, size_t position)
 int vec_remove(Vector* vec, int value)
 {
 	Node* prevNode = NULL;
-	Node* currentNode = vec->start;
+	Node* currentNode = vec->_start;
 
 	while (currentNode != NULL)
 	{
@@ -92,7 +102,7 @@ int vec_remove(Vector* vec, int value)
 		{
 			if (prevNode == NULL)
 			{
-				vec->start = currentNode->next;
+				vec->_start = currentNode->next;
 			}
 			else
 			{
@@ -120,12 +130,12 @@ int vec_remove_at(Vector* vec, size_t position)
 	Node* nodeToDelete;
 	if (position == 0)
 	{
-		nodeToDelete = vec->start;
-		vec->start = nodeToDelete->next;
+		nodeToDelete = vec->_start;
+		vec->_start = nodeToDelete->next;
 	}
 	else
 	{
-		Node* prevNode = _vec_get_node_forward(vec->start, position - 1);
+		Node* prevNode = _vec_get_node_forward(vec->_start, position - 1);
 		nodeToDelete = prevNode->next;
 		prevNode->next = nodeToDelete->next;
 	}
@@ -145,13 +155,13 @@ int vec_at(Vector vec, size_t position)
 		return NULL;
 	}
 
-	Node* node = _vec_get_node_forward(vec.start, position);
+	Node* node = _vec_get_node_forward(vec._start, position);
 	return node->data;
 }
 
 void vec_print(Vector vec)
 {
-	Node* current = vec.start;
+	Node* current = vec._start;
 
 	printf("[");
 	while (current->next)
@@ -161,6 +171,21 @@ void vec_print(Vector vec)
 	}
 	printf("%d]", current->data);
 }
+
+int vec_font(Vector vec)
+{
+	return vec._start->data;
+}
+
+int vec_end(Vector vec)
+{
+	Node* lastNode = _vec_get_node_forward(vec._start, vec.size - 1);
+	return lastNode->data;
+}
+
+// remove front
+// remove back
+// swap
 
 int main()
 {
