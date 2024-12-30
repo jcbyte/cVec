@@ -234,14 +234,31 @@ void vec_swap(Vector* vec, size_t position1, size_t position2)
 		return;
 	}
 
-	// todo if lowerPos == 0
+	_Node* prevLowerNode;
+	_Node* lowerNode;
 
-	_Node* prevLowerNode = _vec_get_node_forward(vec->_start, lowerPos - 1);
-	_Node* lowerNode = prevLowerNode->next;
+	if (lowerPos == 0)
+	{
+		prevLowerNode = NULL;
+		lowerNode = vec->_start;
+	}
+	else
+	{
+		prevLowerNode = _vec_get_node_forward(vec->_start, lowerPos - 1);
+		lowerNode = prevLowerNode->next;
+	}
+
 	_Node* prevHigherNode = _vec_get_node_forward(lowerNode, higherPos - lowerPos - 1);
 	_Node* higherNode = prevHigherNode->next;
 
-	prevLowerNode->next = higherNode;
+	if (lowerPos == 0)
+	{
+		vec->_start = higherNode;
+	}
+	else
+	{
+		prevLowerNode->next = higherNode;
+	}
 	prevHigherNode->next = lowerNode;
 
 	_Node* tempNode = lowerNode->next;
@@ -253,15 +270,15 @@ int main()
 {
 	Vector vec = vec_create();
 
-	vec_push_back(&vec, 20);
-	vec_push_back(&vec, 22);
-	vec_push_front(&vec, 24);
+	vec_push_back(&vec, 2);
+	vec_push_back(&vec, 4);
+	vec_push_front(&vec, 1);
 	vec_insert(&vec, 3, 2);
 
 	vec_print(vec);
 	printf("\n");
 
-	vec_swap(&vec, 0, 3);
+	vec_swap(&vec, 2, 1);
 	vec_print(vec);
 
 	return 0;
