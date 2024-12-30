@@ -203,6 +203,12 @@ int lst_end(List lst)
 	return lastNode->data;
 }
 
+size_t lst_size(List lst)
+{
+	return lst.size;
+}
+
+
 int lst_empty(List lst)
 {
 	return lst.size == 0;
