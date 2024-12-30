@@ -3,11 +3,11 @@
 
 typedef struct {
 	int data;
-	struct Node* next;
-} Node;
+	struct _Node* next;
+} _Node;
 
 typedef struct {
-	Node* _start;
+	_Node* _start;
 	size_t size;
 } Vector;
 
@@ -16,22 +16,22 @@ Vector vec_create()
 	return (Vector) { NULL, 0 };
 }
 
-Node* _vec_create_node(int data)
+_Node* _vec_create_node(int data)
 {
-	Node* node = malloc(sizeof(Node));
+	_Node* node = malloc(sizeof(_Node));
 	node->data = data;
 	node->next = NULL;
 	return node;
 }
 
-void _vec_delete_node(Node* node)
+void _vec_delete_node(_Node* node)
 {
 	free(node);
 }
 
-Node* _vec_get_node_forward(Node* node, size_t forward)
+_Node* _vec_get_node_forward(_Node* node, size_t forward)
 {
-	Node* forwardNode = node;
+	_Node* forwardNode = node;
 	for (int i = 0; i < forward; i++)
 	{
 		forwardNode = forwardNode->next;
@@ -42,7 +42,7 @@ Node* _vec_get_node_forward(Node* node, size_t forward)
 
 void vec_push_front(Vector* vec, int value)
 {
-	Node* newNode = _vec_create_node(value);
+	_Node* newNode = _vec_create_node(value);
 
 	newNode->next = vec->_start;
 	vec->_start = newNode;
@@ -52,7 +52,7 @@ void vec_push_front(Vector* vec, int value)
 
 void vec_push_back(Vector* vec, int value)
 {
-	Node* newNode = _vec_create_node(value);
+	_Node* newNode = _vec_create_node(value);
 
 	if (vec->size == 0)
 	{
@@ -60,7 +60,7 @@ void vec_push_back(Vector* vec, int value)
 	}
 	else
 	{
-		Node* lastNode = _vec_get_node_forward(vec->_start, vec->size - 1);
+		_Node* lastNode = _vec_get_node_forward(vec->_start, vec->size - 1);
 		lastNode->next = newNode;
 	}
 
@@ -74,7 +74,7 @@ void vec_insert(Vector* vec, int value, size_t position)
 		return;
 	}
 
-	Node* newNode = _vec_create_node(value);
+	_Node* newNode = _vec_create_node(value);
 
 	if (position == 0)
 	{
@@ -83,7 +83,7 @@ void vec_insert(Vector* vec, int value, size_t position)
 	}
 	else
 	{
-		Node* nodeAt = _vec_get_node_forward(vec->_start, position - 1);
+		_Node* nodeAt = _vec_get_node_forward(vec->_start, position - 1);
 		newNode->next = nodeAt->next;
 		nodeAt->next = newNode;
 	}
@@ -98,7 +98,7 @@ int vec_pop_front(Vector* vec)
 		return NULL;
 	}
 
-	Node* firstNode = vec->_start;
+	_Node* firstNode = vec->_start;
 	vec->_start = firstNode->next;
 
 	int data = firstNode->data;
@@ -114,8 +114,8 @@ int vec_pop_back(Vector* vec)
 		return NULL;
 	}
 
-	Node* prevLastNode = _vec_get_node_forward(vec->_start, vec->size - 1 - 1);
-	Node* lastNode = prevLastNode->next;
+	_Node* prevLastNode = _vec_get_node_forward(vec->_start, vec->size - 1 - 1);
+	_Node* lastNode = prevLastNode->next;
 	prevLastNode->next = NULL;
 	
 	int data = lastNode->data;
@@ -126,8 +126,8 @@ int vec_pop_back(Vector* vec)
 
 int vec_remove(Vector* vec, int value)
 {
-	Node* prevNode = NULL;
-	Node* currentNode = vec->_start;
+	_Node* prevNode = NULL;
+	_Node* currentNode = vec->_start;
 
 	while (currentNode != NULL)
 	{
@@ -160,7 +160,7 @@ int vec_remove_at(Vector* vec, size_t position)
 		return NULL;
 	}
 
-	Node* nodeToDelete;
+	_Node* nodeToDelete;
 	if (position == 0)
 	{
 		nodeToDelete = vec->_start;
@@ -168,7 +168,7 @@ int vec_remove_at(Vector* vec, size_t position)
 	}
 	else
 	{
-		Node* prevNode = _vec_get_node_forward(vec->_start, position - 1);
+		_Node* prevNode = _vec_get_node_forward(vec->_start, position - 1);
 		nodeToDelete = prevNode->next;
 		prevNode->next = nodeToDelete->next;
 	}
@@ -186,13 +186,13 @@ int vec_at(Vector vec, size_t position)
 		return NULL;
 	}
 
-	Node* node = _vec_get_node_forward(vec._start, position);
+	_Node* node = _vec_get_node_forward(vec._start, position);
 	return node->data;
 }
 
 void vec_print(Vector vec)
 {
-	Node* current = vec._start;
+	_Node* current = vec._start;
 
 	printf("[");
 	while (current->next)
@@ -210,7 +210,7 @@ int vec_font(Vector vec)
 
 int vec_end(Vector vec)
 {
-	Node* lastNode = _vec_get_node_forward(vec._start, vec.size - 1);
+	_Node* lastNode = _vec_get_node_forward(vec._start, vec.size - 1);
 	return lastNode->data;
 }
 
@@ -219,7 +219,10 @@ int vec_empty(Vector vec)
 	return vec.size == 0;
 }
 
-// swap
+void vec_swap(Vector* vec, size_t position1, size_t position_2)
+{
+	// todo
+}
 
 int main()
 {
