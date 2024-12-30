@@ -11,6 +11,11 @@ typedef struct {
 	size_t size;
 } Vector;
 
+Vector vec_create()
+{
+	return (Vector) { NULL, 0 };
+}
+
 Node* _vec_create_node(int data)
 {
 	Node* node = malloc(sizeof(Node));
@@ -135,7 +140,7 @@ int vec_remove_at(Vector* vec, size_t position)
 
 int main()
 {
-	Vector vec = { NULL, 0 };
+	Vector vec = vec_create();
 
 	vec_push(&vec, 20);
 	vec_push(&vec, 22);
