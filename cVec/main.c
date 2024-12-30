@@ -68,14 +68,9 @@ void vec_insert(Vector* vec, int value, size_t position)
 	}
 	else
 	{
-		Node* iNode = vec->start;
-		for (int i = 0; i < position - 1; i++)
-		{
-			iNode = iNode->next;
-		}
-
-		newNode->next = iNode->next;
-		iNode->next = newNode;
+		Node* nodeAt = _vec_get_node_forward(vec->start, position);
+		newNode->next = nodeAt->next;
+		nodeAt->next = newNode;
 	}
 
 	vec->size++;
