@@ -91,6 +91,27 @@ void vec_insert(Vector* vec, int value, size_t position)
 	vec->size++;
 }
 
+int vec_pop_front(Vector* vec)
+{
+	if (vec_empty(*vec))
+	{
+		return NULL;
+	}
+
+	Node* firstNode = vec->_start;
+	vec->_start = firstNode->next;
+
+	int data = firstNode->data;
+	_vec_delete_node(firstNode);
+	vec->size--;
+	return data;
+}
+
+int vec_pop_back(Vector* vec)
+{
+	// todo
+}
+
 int vec_remove(Vector* vec, int value)
 {
 	Node* prevNode = NULL;
@@ -142,9 +163,7 @@ int vec_remove_at(Vector* vec, size_t position)
 
 	int data = nodeToDelete->data;
 	_vec_delete_node(nodeToDelete);
-
 	vec->size--;
-
 	return data;
 }
 
@@ -188,8 +207,6 @@ int vec_empty(Vector vec)
 	return vec.size == 0;
 }
 
-// remove front
-// remove back
 // swap
 
 int main()
