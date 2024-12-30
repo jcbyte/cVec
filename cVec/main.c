@@ -149,6 +149,19 @@ int vec_at(Vector vec, size_t position)
 	return node->data;
 }
 
+void vec_print(Vector vec)
+{
+	Node* current = vec.start;
+
+	printf("[");
+	while (current->next)
+	{
+		printf("%d, ", current->data);
+		current = _vec_get_node_forward(current, 1);
+	}
+	printf("%d]", current->data);
+}
+
 int main()
 {
 	Vector vec = vec_create();
@@ -157,7 +170,7 @@ int main()
 	vec_push(&vec, 22);
 	vec_push(&vec, 24);
 
-	printf("%d %d %d %d", vec_at(vec, 0), vec_at(vec, 1), vec_at(vec, 2), vec_at(vec, 3));
+	vec_print(vec);
 
 	return 0;
 }
