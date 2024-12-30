@@ -80,9 +80,36 @@ int vec_remove(Vector* vec, int value)
 	}
 }
 
-int vec_remove_at(Vector vec, size_t position)
+int vec_remove_at(Vector* vec, size_t position)
 {
+	if (vec->size <= position)
+	{
+		return NULL;
+	}
 
+	Node* prevNode = NULL;
+	Node* iNode = vec->start;
+	for (int i = 0; i < position; i++)
+	{
+		prevNode = iNode;
+		iNode = iNode->next;
+	}
+
+	if (prevNode == NULL)
+	{
+		vec->start = iNode->next;
+	}
+	else
+	{
+		prevNode->next = iNode->next;
+	}
+
+	int data = iNode->data;
+	_vec_delete_node(iNode);
+
+	vec->size--;
+
+	return data;
 }
 
 int main()
@@ -93,7 +120,7 @@ int main()
 	vec_push(&vec, 22);
 	vec_push(&vec, 24);
 
-	vec_remove(&vec, 2);
+	vec_remove_at(&vec, 3);
 
 	return 0;
 }
