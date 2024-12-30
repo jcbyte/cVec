@@ -19,6 +19,11 @@ Node* _vec_create_node(int data)
 	return node;
 }
 
+void _vec_delete_node(Node* node)
+{
+	free(node);
+}
+
 void vec_push(Vector* vec, int value)
 {
 	Node* newNode = _vec_create_node(value);
@@ -45,12 +50,37 @@ void vec_insert(Vector vec, int value, size_t position)
 
 }
 
-void vec_remove(Vector vec, int value)
+int vec_remove(Vector* vec, int value)
 {
+	Node* prevNode = NULL;
+	Node* iNode = vec->start;
+	while (iNode != NULL)
+	{
+		if (iNode->data == value)
+		{
+			if (prevNode == NULL)
+			{
+				vec->start = iNode->next;
+			}
+			else
+			{
+				prevNode->next = iNode->next;
+			}
 
+			int data = iNode->data;
+			_vec_delete_node(iNode);
+
+			vec->size--;
+			
+			return data;			
+		}
+
+		prevNode = iNode;
+		iNode = iNode->next;
+	}
 }
 
-void vec_remove_at(Vector vec, size_t position)
+int vec_remove_at(Vector vec, size_t position)
 {
 
 }
@@ -62,6 +92,8 @@ int main()
 	vec_push(&vec, 20);
 	vec_push(&vec, 22);
 	vec_push(&vec, 24);
+
+	vec_remove(&vec, 2);
 
 	return 0;
 }
