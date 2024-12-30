@@ -9,14 +9,14 @@ typedef struct {
 typedef struct {
 	_Node* _start;
 	size_t size;
-} Vector;
+} List;
 
-Vector vec_create()
+List lst_create()
 {
-	return (Vector) { NULL, 0 };
+	return (List) { NULL, 0 };
 }
 
-_Node* _vec_create_node(int data)
+_Node* _lst_create_node(int data)
 {
 	_Node* node = malloc(sizeof(_Node));
 	node->data = data;
@@ -24,12 +24,12 @@ _Node* _vec_create_node(int data)
 	return node;
 }
 
-void _vec_delete_node(_Node* node)
+void _lst_delete_node(_Node* node)
 {
 	free(node);
 }
 
-_Node* _vec_get_node_forward(_Node* node, size_t forward)
+_Node* _lst_get_node_forward(_Node* node, size_t forward)
 {
 	_Node* forwardNode = node;
 	for (int i = 0; i < forward; i++)
@@ -40,94 +40,94 @@ _Node* _vec_get_node_forward(_Node* node, size_t forward)
 	return forwardNode;
 }
 
-void vec_push_front(Vector* vec, int value)
+void lst_push_front(List* lst, int value)
 {
-	_Node* newNode = _vec_create_node(value);
+	_Node* newNode = _lst_create_node(value);
 
-	newNode->next = vec->_start;
-	vec->_start = newNode;
+	newNode->next = lst->_start;
+	lst->_start = newNode;
 
-	vec->size++;
+	lst->size++;
 }
 
-void vec_push_back(Vector* vec, int value)
+void lst_push_back(List* lst, int value)
 {
-	_Node* newNode = _vec_create_node(value);
+	_Node* newNode = _lst_create_node(value);
 
-	if (vec->size == 0)
+	if (lst->size == 0)
 	{
-		vec->_start = newNode;
+		lst->_start = newNode;
 	}
 	else
 	{
-		_Node* lastNode = _vec_get_node_forward(vec->_start, vec->size - 1);
+		_Node* lastNode = _lst_get_node_forward(lst->_start, lst->size - 1);
 		lastNode->next = newNode;
 	}
 
-	vec->size++;
+	lst->size++;
 }
 
-void vec_insert(Vector* vec, int value, size_t position)
+void lst_insert(List* lst, int value, size_t position)
 {
-	if (vec->size < position)
+	if (lst->size < position)
 	{
 		return;
 	}
 
-	_Node* newNode = _vec_create_node(value);
+	_Node* newNode = _lst_create_node(value);
 
 	if (position == 0)
 	{
-		newNode->next = vec->_start;
-		vec->_start = newNode;
+		newNode->next = lst->_start;
+		lst->_start = newNode;
 	}
 	else
 	{
-		_Node* nodeAt = _vec_get_node_forward(vec->_start, position - 1);
+		_Node* nodeAt = _lst_get_node_forward(lst->_start, position - 1);
 		newNode->next = nodeAt->next;
 		nodeAt->next = newNode;
 	}
 
-	vec->size++;
+	lst->size++;
 }
 
-int vec_pop_front(Vector* vec)
+int lst_pop_front(List* lst)
 {
-	if (vec_empty(*vec))
+	if (lst_empty(*lst))
 	{
 		return NULL;
 	}
 
-	_Node* firstNode = vec->_start;
-	vec->_start = firstNode->next;
+	_Node* firstNode = lst->_start;
+	lst->_start = firstNode->next;
 
 	int data = firstNode->data;
-	_vec_delete_node(firstNode);
-	vec->size--;
+	_lst_delete_node(firstNode);
+	lst->size--;
 	return data;
 }
 
-int vec_pop_back(Vector* vec)
+int lst_pop_back(List* lst)
 {
-	if (vec_empty(*vec))
+	if (lst_empty(*lst))
 	{
 		return NULL;
 	}
 
-	_Node* prevLastNode = _vec_get_node_forward(vec->_start, vec->size - 1 - 1);
+	_Node* prevLastNode = _lst_get_node_forward(lst->_start, lst->size - 1 - 1);
 	_Node* lastNode = prevLastNode->next;
 	prevLastNode->next = NULL;
 	
 	int data = lastNode->data;
-	_vec_delete_node(lastNode);
-	vec->size--;
+	_lst_delete_node(lastNode);
+	lst->size--;
 	return data;
 }
 
-int vec_remove(Vector* vec, int value)
+int lst_remove(List* lst, int value)
 {
 	_Node* prevNode = NULL;
-	_Node* currentNode = vec->_start;
+	_Node* currentNode = lst->_start;
 
 	while (currentNode != NULL)
 	{
@@ -135,7 +135,7 @@ int vec_remove(Vector* vec, int value)
 		{
 			if (prevNode == NULL)
 			{
-				vec->_start = currentNode->next;
+				lst->_start = currentNode->next;
 			}
 			else
 			{
@@ -143,8 +143,8 @@ int vec_remove(Vector* vec, int value)
 			}
 
 			int data = currentNode->data;
-			_vec_delete_node(currentNode);
-			vec->size--;
+			_lst_delete_node(currentNode);
+			lst->size--;
 			return data;			
 		}
 
@@ -153,9 +153,9 @@ int vec_remove(Vector* vec, int value)
 	}
 }
 
-int vec_remove_at(Vector* vec, size_t position)
+int lst_remove_at(List* lst, size_t position)
 {
-	if (vec->size <= position)
+	if (lst->size <= position)
 	{
 		return NULL;
 	}
@@ -163,63 +163,63 @@ int vec_remove_at(Vector* vec, size_t position)
 	_Node* nodeToDelete;
 	if (position == 0)
 	{
-		nodeToDelete = vec->_start;
-		vec->_start = nodeToDelete->next;
+		nodeToDelete = lst->_start;
+		lst->_start = nodeToDelete->next;
 	}
 	else
 	{
-		_Node* prevNode = _vec_get_node_forward(vec->_start, position - 1);
+		_Node* prevNode = _lst_get_node_forward(lst->_start, position - 1);
 		nodeToDelete = prevNode->next;
 		prevNode->next = nodeToDelete->next;
 	}
 
 	int data = nodeToDelete->data;
-	_vec_delete_node(nodeToDelete);
-	vec->size--;
+	_lst_delete_node(nodeToDelete);
+	lst->size--;
 	return data;
 }
 
-int vec_at(Vector vec, size_t position)
+int lst_at(List lst, size_t position)
 {
-	if (vec.size <= position)
+	if (lst.size <= position)
 	{
 		return NULL;
 	}
 
-	_Node* node = _vec_get_node_forward(vec._start, position);
+	_Node* node = _lst_get_node_forward(lst._start, position);
 	return node->data;
 }
 
-void vec_print(Vector vec)
+void lst_print(List lst)
 {
-	_Node* current = vec._start;
+	_Node* current = lst._start;
 
 	printf("[");
 	while (current->next)
 	{
 		printf("%d, ", current->data);
-		current = _vec_get_node_forward(current, 1);
+		current = _lst_get_node_forward(current, 1);
 	}
 	printf("%d]", current->data);
 }
 
-int vec_font(Vector vec)
+int lst_front(List lst)
 {
-	return vec._start->data;
+	return lst._start->data;
 }
 
-int vec_end(Vector vec)
+int lst_end(List lst)
 {
-	_Node* lastNode = _vec_get_node_forward(vec._start, vec.size - 1);
+	_Node* lastNode = _lst_get_node_forward(lst._start, lst.size - 1);
 	return lastNode->data;
 }
 
-int vec_empty(Vector vec)
+int lst_empty(List lst)
 {
-	return vec.size == 0;
+	return lst.size == 0;
 }
 
-void vec_swap(Vector* vec, size_t position1, size_t position2)
+void lst_swap(List* lst, size_t position1, size_t position2)
 {
 	if (position1 == position2)
 	{
@@ -229,7 +229,7 @@ void vec_swap(Vector* vec, size_t position1, size_t position2)
 	size_t lowerPos = (position1 <= position2) ? position1 : position2;
 	size_t higherPos = (position1 > position2) ? position1 : position2;
 
-	if (vec->size <= higherPos)
+	if (lst->size <= higherPos)
 	{
 		return;
 	}
@@ -240,20 +240,20 @@ void vec_swap(Vector* vec, size_t position1, size_t position2)
 	if (lowerPos == 0)
 	{
 		prevLowerNode = NULL;
-		lowerNode = vec->_start;
+		lowerNode = lst->_start;
 	}
 	else
 	{
-		prevLowerNode = _vec_get_node_forward(vec->_start, lowerPos - 1);
+		prevLowerNode = _lst_get_node_forward(lst->_start, lowerPos - 1);
 		lowerNode = prevLowerNode->next;
 	}
 
-	_Node* prevHigherNode = _vec_get_node_forward(lowerNode, higherPos - lowerPos - 1);
+	_Node* prevHigherNode = _lst_get_node_forward(lowerNode, higherPos - lowerPos - 1);
 	_Node* higherNode = prevHigherNode->next;
 
 	if (lowerPos == 0)
 	{
-		vec->_start = higherNode;
+		lst->_start = higherNode;
 	}
 	else
 	{
@@ -268,18 +268,18 @@ void vec_swap(Vector* vec, size_t position1, size_t position2)
 
 int main()
 {
-	Vector vec = vec_create();
+	List lst = lst_create();
 
-	vec_push_back(&vec, 2);
-	vec_push_back(&vec, 4);
-	vec_push_front(&vec, 1);
-	vec_insert(&vec, 3, 2);
+	lst_push_back(&lst, 2);
+	lst_push_back(&lst, 4);
+	lst_push_front(&lst, 1);
+	lst_insert(&lst, 3, 2);
 
-	vec_print(vec);
+	lst_print(lst);
 	printf("\n");
 
-	vec_swap(&vec, 2, 1);
-	vec_print(vec);
+	lst_swap(&lst, 2, 1);
+	lst_print(lst);
 
 	return 0;
 }
