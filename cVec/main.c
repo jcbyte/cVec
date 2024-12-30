@@ -138,6 +138,17 @@ int vec_remove_at(Vector* vec, size_t position)
 	return data;
 }
 
+int vec_at(Vector vec, size_t position)
+{
+	if (vec.size <= position)
+	{
+		return NULL;
+	}
+
+	Node* node = _vec_get_node_forward(vec.start, position);
+	return node->data;
+}
+
 int main()
 {
 	Vector vec = vec_create();
@@ -145,6 +156,8 @@ int main()
 	vec_push(&vec, 20);
 	vec_push(&vec, 22);
 	vec_push(&vec, 24);
+
+	printf("%d %d %d %d", vec_at(vec, 0), vec_at(vec, 1), vec_at(vec, 2), vec_at(vec, 3));
 
 	return 0;
 }
