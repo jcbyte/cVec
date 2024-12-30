@@ -113,25 +113,21 @@ int vec_remove_at(Vector* vec, size_t position)
 		return NULL;
 	}
 
-	Node* prevNode = NULL;
-	Node* iNode = vec->start;
-	for (int i = 0; i < position; i++)
+	Node* nodeToDelete;
+	if (position == 0)
 	{
-		prevNode = iNode;
-		iNode = iNode->next;
-	}
-
-	if (prevNode == NULL)
-	{
-		vec->start = iNode->next;
+		nodeToDelete = vec->start;
+		vec->start = nodeToDelete->next;
 	}
 	else
 	{
-		prevNode->next = iNode->next;
+		Node* prevNode = _vec_get_node_forward(vec->start, position - 1);
+		nodeToDelete = prevNode->next;
+		prevNode->next = nodeToDelete->next;
 	}
 
-	int data = iNode->data;
-	_vec_delete_node(iNode);
+	int data = nodeToDelete->data;
+	_vec_delete_node(nodeToDelete);
 
 	vec->size--;
 
