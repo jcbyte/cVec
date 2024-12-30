@@ -24,6 +24,17 @@ void _vec_delete_node(Node* node)
 	free(node);
 }
 
+Node* _vec_get_node_forward(Node* node, size_t forward)
+{
+	Node* forwardNode = node;
+	for (int i = 0; i < forward; i++)
+	{
+		forwardNode = forwardNode->next;
+	}
+
+	return forwardNode;
+}
+
 void vec_push(Vector* vec, int value)
 {
 	Node* newNode = _vec_create_node(value);
@@ -34,12 +45,8 @@ void vec_push(Vector* vec, int value)
 	}
 	else
 	{
-		Node* iNode = vec->start;
-		while (iNode->next != NULL)
-		{
-			iNode = iNode->next;
-		}
-		iNode->next = newNode;
+		Node* lastNode = _vec_get_node_forward(vec->start, vec->size - 1);
+		lastNode->next = newNode;
 	}
 
 	vec->size++;
@@ -49,7 +56,7 @@ void vec_insert(Vector* vec, int value, size_t position)
 {
 	if (vec->size < position)
 	{
-		return NULL;
+		return;
 	}
 
 	Node* newNode = _vec_create_node(value);
