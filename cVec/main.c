@@ -45,9 +45,33 @@ void vec_push(Vector* vec, int value)
 	vec->size++;
 }
 
-void vec_insert(Vector vec, int value, size_t position)
+void vec_insert(Vector* vec, int value, size_t position)
 {
+	if (vec->size < position)
+	{
+		return NULL;
+	}
 
+	Node* newNode = _vec_create_node(value);
+
+	if (position == 0)
+	{
+		newNode->next = vec->start;
+		vec->start = newNode;
+	}
+	else
+	{
+		Node* iNode = vec->start;
+		for (int i = 0; i < position - 1; i++)
+		{
+			iNode = iNode->next;
+		}
+
+		newNode->next = iNode->next;
+		iNode->next = newNode;
+	}
+
+	vec->size++;
 }
 
 int vec_remove(Vector* vec, int value)
@@ -119,8 +143,6 @@ int main()
 	vec_push(&vec, 20);
 	vec_push(&vec, 22);
 	vec_push(&vec, 24);
-
-	vec_remove_at(&vec, 3);
 
 	return 0;
 }
