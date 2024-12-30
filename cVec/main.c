@@ -83,7 +83,7 @@ void vec_insert(Vector* vec, int value, size_t position)
 	}
 	else
 	{
-		Node* nodeAt = _vec_get_node_forward(vec->_start, position);
+		Node* nodeAt = _vec_get_node_forward(vec->_start, position - 1);
 		newNode->next = nodeAt->next;
 		nodeAt->next = newNode;
 	}
@@ -183,6 +183,11 @@ int vec_end(Vector vec)
 	return lastNode->data;
 }
 
+int vec_empty(Vector vec)
+{
+	return vec.size == 0;
+}
+
 // remove front
 // remove back
 // swap
@@ -191,9 +196,10 @@ int main()
 {
 	Vector vec = vec_create();
 
-	vec_push(&vec, 20);
-	vec_push(&vec, 22);
-	vec_push(&vec, 24);
+	vec_push_back(&vec, 20);
+	vec_push_back(&vec, 22);
+	vec_push_front(&vec, 24);
+	vec_insert(&vec, 3, 2);
 
 	vec_print(vec);
 
