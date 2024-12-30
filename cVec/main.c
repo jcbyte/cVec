@@ -109,7 +109,19 @@ int vec_pop_front(Vector* vec)
 
 int vec_pop_back(Vector* vec)
 {
-	// todo
+	if (vec_empty(*vec))
+	{
+		return NULL;
+	}
+
+	Node* prevLastNode = _vec_get_node_forward(vec->_start, vec->size - 1 - 1);
+	Node* lastNode = prevLastNode->next;
+	prevLastNode->next = NULL;
+	
+	int data = lastNode->data;
+	_vec_delete_node(lastNode);
+	vec->size--;
+	return data;
 }
 
 int vec_remove(Vector* vec, int value)
