@@ -37,6 +37,36 @@ void test_push_back(void)
   CU_ASSERT_EQUAL(lst_at(l, 1), 2);
 }
 
+void test_insert(void)
+{
+  List l = lst_create();
+
+  lst_insert(&l, 3, 0);
+  CU_ASSERT_EQUAL(lst_size(l), 1);
+  CU_ASSERT_EQUAL(lst_at(l, 0), 3);
+
+  lst_insert(&l, 99, 3);
+  CU_ASSERT_EQUAL(lst_size(l), 1);
+
+  lst_insert(&l, 1, 0);
+  CU_ASSERT_EQUAL(lst_size(l), 2);
+  CU_ASSERT_EQUAL(lst_at(l, 0), 1);
+  CU_ASSERT_EQUAL(lst_at(l, 1), 3);
+
+  lst_insert(&l, 2, 1);
+  CU_ASSERT_EQUAL(lst_size(l), 3);
+  CU_ASSERT_EQUAL(lst_at(l, 0), 1);
+  CU_ASSERT_EQUAL(lst_at(l, 1), 2);
+  CU_ASSERT_EQUAL(lst_at(l, 2), 3);
+
+  lst_insert(&l, 4, 3);
+  CU_ASSERT_EQUAL(lst_size(l), 4);
+  CU_ASSERT_EQUAL(lst_at(l, 0), 1);
+  CU_ASSERT_EQUAL(lst_at(l, 1), 2);
+  CU_ASSERT_EQUAL(lst_at(l, 2), 3);
+  CU_ASSERT_EQUAL(lst_at(l, 3), 4);
+}
+
 int main()
 {
   CU_initialize_registry();
@@ -50,7 +80,9 @@ int main()
 
   if (
       (CU_add_test(suite, "Test create", test_create) == NULL) ||
-      (CU_add_test(suite, "Test push_front", test_push_front) == NULL))
+      (CU_add_test(suite, "Test push_front", test_push_front) == NULL) ||
+      (CU_add_test(suite, "Test push_back", test_push_back) == NULL) ||
+      (CU_add_test(suite, "Test insert", test_insert) == NULL))
   {
     CU_cleanup_registry();
     return CU_get_error();
