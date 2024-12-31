@@ -7,6 +7,19 @@ void assert_size(List lst, size_t expected_size)
   CU_ASSERT_EQUAL(lst_size(lst), expected_size);
 }
 
+void assert_at(List l, size_t position, int expected_value)
+{
+  CU_ASSERT_EQUAL(lst_at(l, position), expected_value);
+}
+
+void assert_list_values(List l, int *expected_values, size_t length)
+{
+  for (size_t i = 0; i < length; i++)
+  {
+    assert_at(l, i, expected_values[i]);
+  }
+}
+
 void test_create(void)
 {
   List l = lst_create();
@@ -20,12 +33,11 @@ void test_push_front(void)
 
   lst_push_front(&l, 2);
   assert_size(l, 1);
-  CU_ASSERT_EQUAL(lst_at(l, 0), 2);
+  assert_list_values(l, (int[]){2}, 1);
 
   lst_push_front(&l, 1);
   assert_size(l, 2);
-  CU_ASSERT_EQUAL(lst_at(l, 0), 1);
-  CU_ASSERT_EQUAL(lst_at(l, 1), 2);
+  assert_list_values(l, (int[]){1, 2}, 2);
 }
 
 void test_push_back(void)
@@ -34,12 +46,11 @@ void test_push_back(void)
 
   lst_push_back(&l, 1);
   assert_size(l, 1);
-  CU_ASSERT_EQUAL(lst_at(l, 0), 1);
+  assert_list_values(l, (int[]){1}, 1);
 
   lst_push_back(&l, 2);
   assert_size(l, 2);
-  CU_ASSERT_EQUAL(lst_at(l, 0), 1);
-  CU_ASSERT_EQUAL(lst_at(l, 1), 2);
+  assert_list_values(l, (int[]){1, 2}, 2);
 }
 
 void test_insert(void)
@@ -48,28 +59,22 @@ void test_insert(void)
 
   lst_insert(&l, 3, 0);
   assert_size(l, 1);
-  CU_ASSERT_EQUAL(lst_at(l, 0), 3);
+  assert_list_values(l, (int[]){3}, 1);
 
   lst_insert(&l, 99, 3);
   assert_size(l, 1);
 
   lst_insert(&l, 1, 0);
   assert_size(l, 2);
-  CU_ASSERT_EQUAL(lst_at(l, 0), 1);
-  CU_ASSERT_EQUAL(lst_at(l, 1), 3);
+  assert_list_values(l, (int[]){1, 3}, 2);
 
   lst_insert(&l, 2, 1);
   assert_size(l, 3);
-  CU_ASSERT_EQUAL(lst_at(l, 0), 1);
-  CU_ASSERT_EQUAL(lst_at(l, 1), 2);
-  CU_ASSERT_EQUAL(lst_at(l, 2), 3);
+  assert_list_values(l, (int[]){1, 2, 3}, 3);
 
   lst_insert(&l, 4, 3);
   assert_size(l, 4);
-  CU_ASSERT_EQUAL(lst_at(l, 0), 1);
-  CU_ASSERT_EQUAL(lst_at(l, 1), 2);
-  CU_ASSERT_EQUAL(lst_at(l, 2), 3);
-  CU_ASSERT_EQUAL(lst_at(l, 3), 4);
+  assert_list_values(l, (int[]){1, 2, 3, 4}, 4);
 }
 
 int main()
