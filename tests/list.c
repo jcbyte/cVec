@@ -94,6 +94,19 @@ void test_insert(void)
   lst_destroy(&l);
 }
 
+void test_pop_front(void);
+void test_pop_back(void);
+void test_remove(void);
+void test_remove_at(void);
+void test_at(void);
+void test_print(void);
+void tst_clear(void);
+void test_front(void);
+void test_end(void);
+void test_size(void);
+void test_empty(void);
+void test_swap(void);
+
 int main()
 {
   CU_initialize_registry();
@@ -116,7 +129,19 @@ int main()
       (CU_add_test(suite_create, "Test create", test_create) == NULL) ||
       (CU_add_test(suite_insert, "Test push_front", test_push_front) == NULL) ||
       (CU_add_test(suite_insert, "Test push_back", test_push_back) == NULL) ||
-      (CU_add_test(suite_insert, "Test insert", test_insert) == NULL))
+      (CU_add_test(suite_insert, "Test insert", test_insert) == NULL) ||
+      (CU_add_test(suite_remove, "Test pop_front", test_insert) == NULL) ||
+      (CU_add_test(suite_remove, "Test pop_back", test_insert) == NULL) ||
+      (CU_add_test(suite_remove, "Test remove", test_insert) == NULL) ||
+      (CU_add_test(suite_remove, "Test remove_at", test_insert) == NULL) ||
+      (CU_add_test(suite_util, "Test at", test_insert) == NULL) ||
+      (CU_add_test(suite_util, "Test print", test_insert) == NULL) ||
+      (CU_add_test(suite_util, "Test clear", test_insert) == NULL) ||
+      (CU_add_test(suite_util, "Test front", test_insert) == NULL) ||
+      (CU_add_test(suite_util, "Test end", test_insert) == NULL) ||
+      (CU_add_test(suite_util, "Test size", test_insert) == NULL) ||
+      (CU_add_test(suite_util, "Test empty", test_insert) == NULL) ||
+      (CU_add_test(suite_util, "Test swap", test_insert) == NULL))
   {
     CU_cleanup_registry();
     return CU_get_error();

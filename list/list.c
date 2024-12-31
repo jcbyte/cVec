@@ -5,6 +5,11 @@ List lst_create()
   return (List){NULL, 0};
 }
 
+void lst_destroy(List *lst)
+{
+  lst_clear(lst);
+}
+
 static _Node *_lst_create_node(int data)
 {
   _Node *node = malloc(sizeof(_Node));
@@ -272,9 +277,4 @@ void lst_swap(List *lst, size_t position1, size_t position2)
   _Node *tempNode = lowerNode->next;
   lowerNode->next = higherNode->next;
   higherNode->next = tempNode;
-}
-
-void lst_destroy(List *lst)
-{
-  lst_clear(lst);
 }
