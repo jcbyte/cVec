@@ -234,13 +234,11 @@ void test_at(void)
   CU_ASSERT_EQUAL(lst_at(l, -1), NULL);
 
   // Expected test
-  // These are done using internal structure as our helper functions use lst_at
-  _Node *a = l._start;
-  _Node *b = a->next;
-  _Node *c = b->next;
-  CU_ASSERT_EQUAL(lst_at(l, 0), a->data);
-  CU_ASSERT_EQUAL(lst_at(l, 1), b->data);
-  CU_ASSERT_EQUAL(lst_at(l, 2), c->data);
+  CU_ASSERT_EQUAL(lst_at(l, 0), 1);
+  CU_ASSERT_EQUAL(lst_at(l, 1), 2);
+  CU_ASSERT_EQUAL(lst_at(l, 2), 3);
+
+  lst_destroy(&l);
 }
 
 void test_print(void)
@@ -340,6 +338,16 @@ void test_end(void)
   // Test list with 1 element
   l = lst_create((int[]){2}, 1);
   CU_ASSERT_EQUAL(lst_end(l), 2);
+  lst_destroy(&l);
+
+  // Expected test
+  l = lst_create((int[]){1, 2, 3, 4, 5}, 5);
+  CU_ASSERT_EQUAL(lst_end(l), 5);
+  lst_destroy(&l);
+}
+
+void test_size(void)
+{
   // Expected tests
   List l = lst_create_empty();
   CU_ASSERT_EQUAL(lst_size(l), 0);
@@ -352,16 +360,6 @@ void test_end(void)
   l = lst_create((int[]){1, 2, 3, 4, 5}, 5);
   CU_ASSERT_EQUAL(lst_size(l), 5);
   lst_destroy(&l);
-
-  // Expected test
-  l = lst_create((int[]){1, 2, 3, 4, 5}, 5);
-  CU_ASSERT_EQUAL(lst_end(l), 5);
-  lst_destroy(&l);
-}
-
-void test_size(void)
-{
-  // These are done using internal structure as our helper functions use lst_at
 }
 void test_empty(void) {}
 void test_swap(void) {}
