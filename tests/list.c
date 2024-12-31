@@ -1,5 +1,6 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
+#include <unistd.h>
 #include "../list/list.h"
 
 void assert_size(List lst, size_t expected_size)
@@ -234,7 +235,7 @@ void test_at(void)
 
   // Expected test
   // These are done using internal structure as our helper functions use lst_at
-  _Node *a = l._start->next;
+  _Node *a = l._start;
   _Node *b = a->next;
   _Node *c = b->next;
   CU_ASSERT_EQUAL(lst_at(l, 0), a->data);
@@ -242,16 +243,69 @@ void test_at(void)
   CU_ASSERT_EQUAL(lst_at(l, 2), c->data);
 }
 
-void test_print(void);
-void tst_clear(void);
-void test_front(void);
-void test_end(void);
+void test_print(void)
+{
+  // Create a pipe
+  int pipefd[2];
+  if (pipe(pipefd) == -1)
+  {
+    CU_FAIL("Failed to create pipe.");
+    return;
+  }
+
+  // Save original stdout file descriptor
+  int original_stdout = dup(fileno(stdout));
+
+  // Redirect stdout to the pipe
+  dup2(pipefd[1], fileno(stdout));
+  // Close write end of the pipe in the parent process
+  close(pipefd[1]);
+
+  // Test empty list
+  List l = lst_create_empty();
+  lst_print(l);
+  // Ensure output is flushed to the pipe
+  fflush(stdout);
+
+  // Read from the pipe
+  char buffer[20] = {0};
+  read(pipefd[0], buffer, sizeof(buffer) - 1);
+
+  CU_ASSERT_STRING_EQUAL(buffer, "[]");
+  lst_destroy(&l);
+
+  // Clear buffer
+  memset(buffer, 0, sizeof(buffer));
+
+  // Test a list with elements
+  l = lst_create((int[]){1, 2, 3, 4}, 4);
+  lst_print(l);
+  // Ensure output is flushed to the pipe
+  fflush(stdout);
+
+  // Read from the pipe
+  read(pipefd[0], buffer, sizeof(buffer) - 1);
+
+  CU_ASSERT_STRING_EQUAL(buffer, "[1, 2, 3, 4]");
+  lst_destroy(&l);
+
+  // Close read end of the pipe
+  close(pipefd[0]);
+
+  // Restore the original stdout
+  dup2(original_stdout, fileno(stdout));
+  close(original_stdout);
+}
+
+void test_clear(void) {}
+void test_front(void) {}
+void test_end(void) {}
 void test_size(void)
 {
   // These are done using internal structure as our helper functions use lst_at
 }
-void test_empty(void);
-void test_swap(void);
+void test_empty(void) {}
+void test_swap(void) {}
 
 int main()
 {

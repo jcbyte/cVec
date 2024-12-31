@@ -217,6 +217,12 @@ int lst_at(List lst, size_t position)
 
 void lst_print(List lst)
 {
+  if (lst_empty(lst))
+  {
+    printf("[]");
+    return;
+  }
+
   _Node *current = lst._start;
 
   printf("[");
