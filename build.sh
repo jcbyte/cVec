@@ -1,5 +1,7 @@
 #!/bin/bash
 
+: ${WORKSPACE:=$PWD}
+
 # Variables
 GCC="/usr/bin/gcc"
 OUTPUT_DIR="${PWD}/build"

@@ -8,6 +8,11 @@
       "args": [
         "${file}"
       ],
+      "options": {
+        "env": {
+          "WORKSPACE": "${workspaceFolder}"
+        }
+      },
       "problemMatcher": [
         "$gcc"
       ],
