@@ -297,7 +297,21 @@ void test_print(void)
   close(original_stdout);
 }
 
-void test_clear(void) {}
+void test_clear(void)
+{
+  // Test clearing empty list
+  List l = lst_create_empty();
+  lst_clear(&l);
+  assert_size(l, 0);
+  lst_destroy(&l);
+
+  // Expected test
+  l = lst_create((int[]){1, 2, 3, 4, 5}, 5);
+  lst_clear(&l);
+  assert_size(l, 0);
+  lst_destroy(&l);
+}
+
 void test_front(void) {}
 void test_end(void) {}
 void test_size(void)
