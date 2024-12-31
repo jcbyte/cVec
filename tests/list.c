@@ -186,6 +186,8 @@ void test_remove(void)
   CU_ASSERT_EQUAL(lst_remove(&l, 2), 2);
   assert_size(l, 3);
   assert_list_values(l, (int[]){1, 3, 4}, 3);
+
+  lst_destroy(&l);
 }
 
 void test_remove_at(void)
