@@ -454,6 +454,7 @@ int main()
 {
   CU_initialize_registry();
 
+  // Create test suites
   CU_pSuite suite_create = CU_add_suite("List Creation Test Suite", NULL, NULL);
   CU_pSuite suite_insert = CU_add_suite("List Insertion Test Suite", NULL, NULL);
   CU_pSuite suite_remove = CU_add_suite("List Removal Test Suite", NULL, NULL);
@@ -468,6 +469,7 @@ int main()
     return CU_get_error();
   }
 
+  // Add tests to suites
   if (
       (CU_add_test(suite_create, "Test create_empty", test_create_empty) == NULL) ||
       (CU_add_test(suite_create, "Test create", test_create) == NULL) ||
@@ -491,6 +493,7 @@ int main()
     return CU_get_error();
   }
 
+  // Run test
   CU_basic_set_mode(CU_BRM_VERBOSE);
   CU_basic_run_tests();
 
