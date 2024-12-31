@@ -130,9 +130,18 @@ int lst_pop_back(List *lst)
     return NULL;
   }
 
-  _Node *prevLastNode = _lst_get_node_forward(lst->_start, lst->size - 1 - 1);
-  _Node *lastNode = prevLastNode->next;
-  prevLastNode->next = NULL;
+  _Node *lastNode;
+  if (lst->size == 1)
+  {
+    lastNode = lst->_start;
+    lst->_start = NULL;
+  }
+  else
+  {
+    _Node *prevLastNode = _lst_get_node_forward(lst->_start, lst->size - 1 - 1);
+    lastNode = prevLastNode->next;
+    prevLastNode->next = NULL;
+  }
 
   int data = lastNode->data;
   _lst_destroy_node(lastNode);
