@@ -340,6 +340,17 @@ void test_end(void)
   // Test list with 1 element
   l = lst_create((int[]){2}, 1);
   CU_ASSERT_EQUAL(lst_end(l), 2);
+  // Expected tests
+  List l = lst_create_empty();
+  CU_ASSERT_EQUAL(lst_size(l), 0);
+  lst_destroy(&l);
+
+  l = lst_create((int[]){1}, 1);
+  CU_ASSERT_EQUAL(lst_size(l), 1);
+  lst_destroy(&l);
+
+  l = lst_create((int[]){1, 2, 3, 4, 5}, 5);
+  CU_ASSERT_EQUAL(lst_size(l), 5);
   lst_destroy(&l);
 
   // Expected test
