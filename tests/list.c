@@ -57,12 +57,13 @@ void test_insert(void)
 {
   List l = lst_create();
 
+  // Test inserting list out of bounds with empty list
+  lst_insert(&l, 99, 7);
+  assert_size(l, 0);
+
   lst_insert(&l, 3, 0);
   assert_size(l, 1);
   assert_list_values(l, (int[]){3}, 1);
-
-  lst_insert(&l, 99, 3);
-  assert_size(l, 1);
 
   lst_insert(&l, 1, 0);
   assert_size(l, 2);
@@ -75,6 +76,14 @@ void test_insert(void)
   lst_insert(&l, 4, 3);
   assert_size(l, 4);
   assert_list_values(l, (int[]){1, 2, 3, 4}, 4);
+
+  // Test inserting list out of bounds with filled list
+  lst_insert(&l, 99, 3);
+  assert_size(l, 4);
+
+  // Test inserting list at negative position
+  lst_insert(&l, 99, -1);
+  assert_size(l, 4);
 }
 
 int main()
