@@ -378,7 +378,75 @@ void test_empty(void)
   lst_destroy(&l);
 }
 
-void test_swap(void) {}
+void test_swap(void)
+{
+  // Test empty list
+  List l = lst_create_empty();
+  lst_swap(&l, 0, 0);
+  assert_size(l, 0);
+  lst_destroy(&l);
+
+  // Test list with 1 element
+  l = lst_create((int[]){1}, 1);
+  lst_swap(&l, 0, 0);
+  assert_size(l, 1);
+  assert_list_values(l, (int[]){1}, 1);
+  lst_destroy(&l);
+
+  // Test list with 2 elements
+  l = lst_create((int[]){1, 2}, 2);
+  lst_swap(&l, 1, 0);
+  assert_size(l, 2);
+  assert_list_values(l, (int[]){2, 1}, 2);
+  lst_destroy(&l);
+
+  // Test position 1 out of bounds
+  l = lst_create((int[]){1, 2, 3, 4, 5}, 5);
+  lst_swap(&l, 12, 1);
+  assert_size(l, 5);
+  assert_list_values(l, (int[]){1, 2, 3, 4, 5}, 5);
+
+  // Test position 2 out of bounds
+  lst_swap(&l, 2, 7);
+  assert_size(l, 5);
+  assert_list_values(l, (int[]){1, 2, 3, 4, 5}, 5);
+
+  // Test both positions out of bounds
+  lst_swap(&l, 12, 7);
+  assert_size(l, 5);
+  assert_list_values(l, (int[]){1, 2, 3, 4, 5}, 5);
+
+  // Test same position
+  lst_swap(&l, 2, 2);
+  assert_size(l, 5);
+  assert_list_values(l, (int[]){1, 2, 3, 4, 5}, 5);
+
+  // Test end to end
+  lst_swap(&l, 0, 4);
+  assert_size(l, 5);
+  assert_list_values(l, (int[]){5, 2, 3, 4, 1}, 5);
+
+  // Test adjacent elements at the start
+  lst_swap(&l, 0, 1);
+  assert_size(l, 5);
+  assert_list_values(l, (int[]){2, 5, 3, 4, 1}, 5);
+
+  // Test adjacent elements at the end
+  lst_swap(&l, 3, 4);
+  assert_size(l, 5);
+  assert_list_values(l, (int[]){2, 5, 3, 1, 4}, 5);
+
+  // Expected tests
+  lst_swap(&l, 0, 2);
+  assert_size(l, 5);
+  assert_list_values(l, (int[]){3, 5, 2, 1, 4}, 5);
+
+  lst_swap(&l, 3, 1);
+  assert_size(l, 5);
+  assert_list_values(l, (int[]){3, 1, 2, 5, 4}, 5);
+
+  lst_destroy(&l);
+}
 
 int main()
 {
