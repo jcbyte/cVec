@@ -250,11 +250,21 @@ void lst_clear(List *lst)
 
 int lst_front(List lst)
 {
+  if (lst_empty(lst))
+  {
+    return NULL;
+  }
+
   return lst._start->data;
 }
 
 int lst_end(List lst)
 {
+  if (lst_empty(lst))
+  {
+    return NULL;
+  }
+
   _Node *lastNode = _lst_get_node_forward(lst._start, lst.size - 1);
   return lastNode->data;
 }

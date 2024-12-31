@@ -319,6 +319,11 @@ void test_front(void)
   CU_ASSERT_EQUAL(lst_front(l), NULL);
   lst_destroy(&l);
 
+  // Test list with 1 element
+  l = lst_create((int[]){2}, 1);
+  CU_ASSERT_EQUAL(lst_front(l), 2);
+  lst_destroy(&l);
+
   // Expected test
   l = lst_create((int[]){1, 2, 3, 4, 5}, 5);
   CU_ASSERT_EQUAL(lst_front(l), 1);
@@ -330,6 +335,11 @@ void test_end(void)
   // Test empty list
   List l = lst_create_empty();
   CU_ASSERT_EQUAL(lst_end(l), NULL);
+  lst_destroy(&l);
+
+  // Test list with 1 element
+  l = lst_create((int[]){2}, 1);
+  CU_ASSERT_EQUAL(lst_end(l), 2);
   lst_destroy(&l);
 
   // Expected test
