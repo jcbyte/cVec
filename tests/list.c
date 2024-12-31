@@ -187,7 +187,36 @@ void test_remove(void)
   assert_list_values(l, (int[]){1, 3, 4}, 4);
 }
 
-void test_remove_at(void);
+void test_remove_at(void)
+{
+  // Test removing with 1 element
+  List l = lst_create((int[]){1}, 1);
+  CU_ASSERT_EQUAL(lst_remove_at(&l, 0), 1);
+  assert_size(l, 0);
+
+  // Test removing with 0 elements
+  CU_ASSERT_EQUAL(lst_remove_at(&l, 0), NULL);
+  assert_size(l, 0);
+  lst_destroy(&l);
+
+  // Expected test
+  l = lst_create((int[]){1, 2, 3}, 3);
+  CU_ASSERT_EQUAL(lst_remove_at(&l, 7), NULL);
+  assert_size(l, 3);
+  assert_list_values(l, (int[]){1, 2, 3}, 3);
+
+  // Expected test
+  CU_ASSERT_EQUAL(lst_remove_at(&l, 1), 2);
+  assert_size(l, 2);
+  assert_list_values(l, (int[]){1, 3}, 2);
+
+  // Test removing at end
+  CU_ASSERT_EQUAL(lst_remove_at(&l, 1), 3);
+  assert_size(l, 1);
+  assert_list_values(l, (int[]){1}, 1);
+
+  lst_destroy(&l);
+}
 
 void test_at(void);
 void test_print(void);
