@@ -78,7 +78,7 @@ void test_insert(void)
   assert_list_values(l, (int[]){1, 2, 3, 4}, 4);
 
   // Test inserting list out of bounds with filled list
-  lst_insert(&l, 99, 3);
+  lst_insert(&l, 99, 5);
   assert_size(l, 4);
 
   // Test inserting list at negative position
@@ -90,18 +90,25 @@ int main()
 {
   CU_initialize_registry();
 
-  CU_pSuite suite = CU_add_suite("List Test Suite", NULL, NULL);
-  if (suite == NULL)
+  CU_pSuite suite_create = CU_add_suite("List Creation Test Suite", NULL, NULL);
+  CU_pSuite suite_insert = CU_add_suite("List Insertion Test Suite", NULL, NULL);
+  CU_pSuite suite_remove = CU_add_suite("List Removal Test Suite", NULL, NULL);
+  CU_pSuite suite_util = CU_add_suite("List Util Test Suite", NULL, NULL);
+  if (
+      (suite_create == NULL) ||
+      (suite_insert == NULL) ||
+      (suite_remove == NULL) ||
+      (suite_util == NULL))
   {
     CU_cleanup_registry();
     return CU_get_error();
   }
 
   if (
-      (CU_add_test(suite, "Test create", test_create) == NULL) ||
-      (CU_add_test(suite, "Test push_front", test_push_front) == NULL) ||
-      (CU_add_test(suite, "Test push_back", test_push_back) == NULL) ||
-      (CU_add_test(suite, "Test insert", test_insert) == NULL))
+      (CU_add_test(suite_create, "Test create", test_create) == NULL) ||
+      (CU_add_test(suite_insert, "Test push_front", test_push_front) == NULL) ||
+      (CU_add_test(suite_insert, "Test push_back", test_push_back) == NULL) ||
+      (CU_add_test(suite_insert, "Test insert", test_insert) == NULL))
   {
     CU_cleanup_registry();
     return CU_get_error();

@@ -34,5 +34,4 @@ int lst_front(List lst);
 int lst_end(List lst);
 size_t lst_size(List lst);
 int lst_empty(List lst);
-
 void lst_swap(List *lst, size_t position1, size_t position2);
