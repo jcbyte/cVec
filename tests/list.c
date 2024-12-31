@@ -218,12 +218,38 @@ void test_remove_at(void)
   lst_destroy(&l);
 }
 
-void test_at(void);
+void test_at(void)
+{
+  // Test getting element from empty list
+  List l = lst_create_empty();
+  CU_ASSERT_EQUAL(lst_at(l, 0), NULL);
+  lst_destroy(&l);
+
+  // Test getting element out of bounds
+  l = lst_create((int[]){1, 2, 3}, 3);
+  CU_ASSERT_EQUAL(lst_at(l, 8), NULL);
+
+  // Test geting negative position
+  CU_ASSERT_EQUAL(lst_at(l, -1), NULL);
+
+  // Expected test
+  // These are done using internal structure as our helper functions use lst_at
+  _Node *a = l._start->next;
+  _Node *b = a->next;
+  _Node *c = b->next;
+  CU_ASSERT_EQUAL(lst_at(l, 0), a->data);
+  CU_ASSERT_EQUAL(lst_at(l, 1), b->data);
+  CU_ASSERT_EQUAL(lst_at(l, 2), c->data);
+}
+
 void test_print(void);
 void tst_clear(void);
 void test_front(void);
 void test_end(void);
-void test_size(void);
+void test_size(void)
+{
+  // These are done using internal structure as our helper functions use lst_at
+}
 void test_empty(void);
 void test_swap(void);
 
