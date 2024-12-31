@@ -2,11 +2,16 @@
 #include <CUnit/Basic.h>
 #include "../list/list.h"
 
+void assert_size(List lst, size_t expected_size)
+{
+  CU_ASSERT_EQUAL(lst_size(lst), expected_size);
+}
+
 void test_create(void)
 {
   List l = lst_create();
 
-  CU_ASSERT_EQUAL(lst_size(l), 0);
+  assert_size(l, 0);
 }
 
 void test_push_front(void)
@@ -14,11 +19,11 @@ void test_push_front(void)
   List l = lst_create();
 
   lst_push_front(&l, 2);
-  CU_ASSERT_EQUAL(lst_size(l), 1);
+  assert_size(l, 1);
   CU_ASSERT_EQUAL(lst_at(l, 0), 2);
 
   lst_push_front(&l, 1);
-  CU_ASSERT_EQUAL(lst_size(l), 2);
+  assert_size(l, 2);
   CU_ASSERT_EQUAL(lst_at(l, 0), 1);
   CU_ASSERT_EQUAL(lst_at(l, 1), 2);
 }
@@ -28,11 +33,11 @@ void test_push_back(void)
   List l = lst_create();
 
   lst_push_back(&l, 1);
-  CU_ASSERT_EQUAL(lst_size(l), 1);
+  assert_size(l, 1);
   CU_ASSERT_EQUAL(lst_at(l, 0), 1);
 
   lst_push_back(&l, 2);
-  CU_ASSERT_EQUAL(lst_size(l), 2);
+  assert_size(l, 2);
   CU_ASSERT_EQUAL(lst_at(l, 0), 1);
   CU_ASSERT_EQUAL(lst_at(l, 1), 2);
 }
@@ -42,25 +47,25 @@ void test_insert(void)
   List l = lst_create();
 
   lst_insert(&l, 3, 0);
-  CU_ASSERT_EQUAL(lst_size(l), 1);
+  assert_size(l, 1);
   CU_ASSERT_EQUAL(lst_at(l, 0), 3);
 
   lst_insert(&l, 99, 3);
-  CU_ASSERT_EQUAL(lst_size(l), 1);
+  assert_size(l, 1);
 
   lst_insert(&l, 1, 0);
-  CU_ASSERT_EQUAL(lst_size(l), 2);
+  assert_size(l, 2);
   CU_ASSERT_EQUAL(lst_at(l, 0), 1);
   CU_ASSERT_EQUAL(lst_at(l, 1), 3);
 
   lst_insert(&l, 2, 1);
-  CU_ASSERT_EQUAL(lst_size(l), 3);
+  assert_size(l, 3);
   CU_ASSERT_EQUAL(lst_at(l, 0), 1);
   CU_ASSERT_EQUAL(lst_at(l, 1), 2);
   CU_ASSERT_EQUAL(lst_at(l, 2), 3);
 
   lst_insert(&l, 4, 3);
-  CU_ASSERT_EQUAL(lst_size(l), 4);
+  assert_size(l, 4);
   CU_ASSERT_EQUAL(lst_at(l, 0), 1);
   CU_ASSERT_EQUAL(lst_at(l, 1), 2);
   CU_ASSERT_EQUAL(lst_at(l, 2), 3);
