@@ -1,262 +1,327 @@
 #include "list.h"
 
-List lst_create()
+static _Node *_lst_create_node(int data)
 {
-	return (List) { NULL, 0 };
+  _Node *node = malloc(sizeof(_Node));
+  node->data = data;
+  node->next = NULL;
+  return node;
 }
 
-static _Node* _lst_create_node(int data)
+static void _lst_destroy_node(_Node *node)
 {
-	_Node* node = malloc(sizeof(_Node));
-	node->data = data;
-	node->next = NULL;
-	return node;
+  free(node);
 }
 
-static void _lst_delete_node(_Node* node)
+static _Node *_lst_get_node_forward(_Node *node, size_t forward)
 {
-	free(node);
+  _Node *forwardNode = node;
+  for (size_t i = 0; i < forward; i++)
+  {
+    forwardNode = forwardNode->next;
+  }
+
+  return forwardNode;
 }
 
-static _Node* _lst_get_node_forward(_Node* node, size_t forward)
+List lst_create_empty()
 {
-	_Node* forwardNode = node;
-	for (int i = 0; i < forward; i++)
-	{
-		forwardNode = forwardNode->next;
-	}
-
-	return forwardNode;
+  return (List){NULL, 0};
 }
 
-void lst_push_front(List* lst, int value)
+List lst_create(int *values, size_t length)
 {
-	_Node* newNode = _lst_create_node(value);
+  List lst = lst_create_empty();
 
-	newNode->next = lst->_start;
-	lst->_start = newNode;
+  if (values == NULL || length == 0)
+  {
+    return lst;
+  }
 
-	lst->size++;
+  _Node *node = _lst_create_node(values[0]);
+  lst._start = node;
+  for (size_t i = 1; i < length; i++)
+  {
+    _Node *nextNode = _lst_create_node(values[i]);
+    node->next = nextNode;
+    node = nextNode;
+  }
+  lst.size = length;
+
+  return lst;
 }
 
-void lst_push_back(List* lst, int value)
+void lst_destroy(List *lst)
 {
-	_Node* newNode = _lst_create_node(value);
-
-	if (lst->size == 0)
-	{
-		lst->_start = newNode;
-	}
-	else
-	{
-		_Node* lastNode = _lst_get_node_forward(lst->_start, lst->size - 1);
-		lastNode->next = newNode;
-	}
-
-	lst->size++;
+  lst_clear(lst);
 }
 
-void lst_insert(List* lst, int value, size_t position)
+void lst_push_front(List *lst, int value)
 {
-	if (lst->size < position)
-	{
-		return;
-	}
+  _Node *newNode = _lst_create_node(value);
 
-	_Node* newNode = _lst_create_node(value);
+  newNode->next = lst->_start;
+  lst->_start = newNode;
 
-	if (position == 0)
-	{
-		newNode->next = lst->_start;
-		lst->_start = newNode;
-	}
-	else
-	{
-		_Node* nodeAt = _lst_get_node_forward(lst->_start, position - 1);
-		newNode->next = nodeAt->next;
-		nodeAt->next = newNode;
-	}
-
-	lst->size++;
+  lst->size++;
 }
 
-int lst_pop_front(List* lst)
+void lst_push_back(List *lst, int value)
 {
-	if (lst_empty(*lst))
-	{
-		return NULL;
-	}
+  _Node *newNode = _lst_create_node(value);
 
-	_Node* firstNode = lst->_start;
-	lst->_start = firstNode->next;
+  if (lst->size == 0)
+  {
+    lst->_start = newNode;
+  }
+  else
+  {
+    _Node *lastNode = _lst_get_node_forward(lst->_start, lst->size - 1);
+    lastNode->next = newNode;
+  }
 
-	int data = firstNode->data;
-	_lst_delete_node(firstNode);
-	lst->size--;
-	return data;
+  lst->size++;
 }
 
-int lst_pop_back(List* lst)
+void lst_insert(List *lst, int value, size_t position)
 {
-	if (lst_empty(*lst))
-	{
-		return NULL;
-	}
+  if (lst->size < position)
+  {
+    return;
+  }
 
-	_Node* prevLastNode = _lst_get_node_forward(lst->_start, lst->size - 1 - 1);
-	_Node* lastNode = prevLastNode->next;
-	prevLastNode->next = NULL;
+  _Node *newNode = _lst_create_node(value);
 
-	int data = lastNode->data;
-	_lst_delete_node(lastNode);
-	lst->size--;
-	return data;
+  if (position == 0)
+  {
+    newNode->next = lst->_start;
+    lst->_start = newNode;
+  }
+  else
+  {
+    _Node *nodeAt = _lst_get_node_forward(lst->_start, position - 1);
+    newNode->next = nodeAt->next;
+    nodeAt->next = newNode;
+  }
+
+  lst->size++;
 }
 
-int lst_remove(List* lst, int value)
+int lst_pop_front(List *lst)
 {
-	_Node* prevNode = NULL;
-	_Node* currentNode = lst->_start;
+  if (lst_empty(*lst))
+  {
+    return NULL;
+  }
 
-	while (currentNode != NULL)
-	{
-		if (currentNode->data == value)
-		{
-			if (prevNode == NULL)
-			{
-				lst->_start = currentNode->next;
-			}
-			else
-			{
-				prevNode->next = currentNode->next;
-			}
+  _Node *firstNode = lst->_start;
+  lst->_start = firstNode->next;
 
-			int data = currentNode->data;
-			_lst_delete_node(currentNode);
-			lst->size--;
-			return data;
-		}
-
-		prevNode = currentNode;
-		currentNode = currentNode->next;
-	}
+  int data = firstNode->data;
+  _lst_destroy_node(firstNode);
+  lst->size--;
+  return data;
 }
 
-int lst_remove_at(List* lst, size_t position)
+int lst_pop_back(List *lst)
 {
-	if (lst->size <= position)
-	{
-		return NULL;
-	}
+  if (lst_empty(*lst))
+  {
+    return NULL;
+  }
 
-	_Node* nodeToDelete;
-	if (position == 0)
-	{
-		nodeToDelete = lst->_start;
-		lst->_start = nodeToDelete->next;
-	}
-	else
-	{
-		_Node* prevNode = _lst_get_node_forward(lst->_start, position - 1);
-		nodeToDelete = prevNode->next;
-		prevNode->next = nodeToDelete->next;
-	}
+  _Node *lastNode;
+  if (lst->size == 1)
+  {
+    lastNode = lst->_start;
+    lst->_start = NULL;
+  }
+  else
+  {
+    _Node *prevLastNode = _lst_get_node_forward(lst->_start, lst->size - 1 - 1);
+    lastNode = prevLastNode->next;
+    prevLastNode->next = NULL;
+  }
 
-	int data = nodeToDelete->data;
-	_lst_delete_node(nodeToDelete);
-	lst->size--;
-	return data;
+  int data = lastNode->data;
+  _lst_destroy_node(lastNode);
+  lst->size--;
+  return data;
+}
+
+int lst_remove(List *lst, int value)
+{
+  _Node *prevNode = NULL;
+  _Node *currentNode = lst->_start;
+
+  while (currentNode != NULL)
+  {
+    if (currentNode->data == value)
+    {
+      if (prevNode == NULL)
+      {
+        lst->_start = currentNode->next;
+      }
+      else
+      {
+        prevNode->next = currentNode->next;
+      }
+
+      int data = currentNode->data;
+      _lst_destroy_node(currentNode);
+      lst->size--;
+      return data;
+    }
+
+    prevNode = currentNode;
+    currentNode = currentNode->next;
+  }
+}
+
+int lst_remove_at(List *lst, size_t position)
+{
+  if (lst->size <= position)
+  {
+    return NULL;
+  }
+
+  _Node *nodeToDelete;
+  if (position == 0)
+  {
+    nodeToDelete = lst->_start;
+    lst->_start = nodeToDelete->next;
+  }
+  else
+  {
+    _Node *prevNode = _lst_get_node_forward(lst->_start, position - 1);
+    nodeToDelete = prevNode->next;
+    prevNode->next = nodeToDelete->next;
+  }
+
+  int data = nodeToDelete->data;
+  _lst_destroy_node(nodeToDelete);
+  lst->size--;
+  return data;
 }
 
 int lst_at(List lst, size_t position)
 {
-	if (lst.size <= position)
-	{
-		return NULL;
-	}
+  if (lst.size <= position)
+  {
+    return NULL;
+  }
 
-	_Node* node = _lst_get_node_forward(lst._start, position);
-	return node->data;
+  _Node *node = _lst_get_node_forward(lst._start, position);
+  return node->data;
 }
 
 void lst_print(List lst)
 {
-	_Node* current = lst._start;
+  if (lst_empty(lst))
+  {
+    printf("[]");
+    return;
+  }
 
-	printf("[");
-	while (current->next)
-	{
-		printf("%d, ", current->data);
-		current = _lst_get_node_forward(current, 1);
-	}
-	printf("%d]", current->data);
+  _Node *current = lst._start;
+
+  printf("[");
+  while (current->next)
+  {
+    printf("%d, ", current->data);
+    current = _lst_get_node_forward(current, 1);
+  }
+  printf("%d]", current->data);
+}
+
+void lst_clear(List *lst)
+{
+  _Node *current = lst->_start;
+  while (current != NULL)
+  {
+    _Node *next = current->next;
+    _lst_destroy_node(current);
+    current = next;
+  }
+
+  lst->_start = NULL;
+  lst->size = 0;
 }
 
 int lst_front(List lst)
 {
-	return lst._start->data;
+  if (lst_empty(lst))
+  {
+    return NULL;
+  }
+
+  return lst._start->data;
 }
 
 int lst_end(List lst)
 {
-	_Node* lastNode = _lst_get_node_forward(lst._start, lst.size - 1);
-	return lastNode->data;
+  if (lst_empty(lst))
+  {
+    return NULL;
+  }
+
+  _Node *lastNode = _lst_get_node_forward(lst._start, lst.size - 1);
+  return lastNode->data;
 }
 
 size_t lst_size(List lst)
 {
-	return lst.size;
+  return lst.size;
 }
-
 
 int lst_empty(List lst)
 {
-	return lst.size == 0;
+  return lst.size == 0;
 }
 
-void lst_swap(List* lst, size_t position1, size_t position2)
+void lst_swap(List *lst, size_t position1, size_t position2)
 {
-	if (position1 == position2)
-	{
-		return;
-	}
+  if (position1 == position2)
+  {
+    return;
+  }
 
-	size_t lowerPos = (position1 <= position2) ? position1 : position2;
-	size_t higherPos = (position1 > position2) ? position1 : position2;
+  size_t lowerPos = (position1 <= position2) ? position1 : position2;
+  size_t higherPos = (position1 > position2) ? position1 : position2;
 
-	if (lst->size <= higherPos)
-	{
-		return;
-	}
+  if (lst->size <= higherPos)
+  {
+    return;
+  }
 
-	_Node* prevLowerNode;
-	_Node* lowerNode;
+  _Node *prevLowerNode;
+  _Node *lowerNode;
 
-	if (lowerPos == 0)
-	{
-		prevLowerNode = NULL;
-		lowerNode = lst->_start;
-	}
-	else
-	{
-		prevLowerNode = _lst_get_node_forward(lst->_start, lowerPos - 1);
-		lowerNode = prevLowerNode->next;
-	}
+  if (lowerPos == 0)
+  {
+    prevLowerNode = NULL;
+    lowerNode = lst->_start;
+  }
+  else
+  {
+    prevLowerNode = _lst_get_node_forward(lst->_start, lowerPos - 1);
+    lowerNode = prevLowerNode->next;
+  }
 
-	_Node* prevHigherNode = _lst_get_node_forward(lowerNode, higherPos - lowerPos - 1);
-	_Node* higherNode = prevHigherNode->next;
+  _Node *prevHigherNode = _lst_get_node_forward(lowerNode, higherPos - lowerPos - 1);
+  _Node *higherNode = prevHigherNode->next;
 
-	if (lowerPos == 0)
-	{
-		lst->_start = higherNode;
-	}
-	else
-	{
-		prevLowerNode->next = higherNode;
-	}
-	prevHigherNode->next = lowerNode;
+  if (lowerPos == 0)
+  {
+    lst->_start = higherNode;
+  }
+  else
+  {
+    prevLowerNode->next = higherNode;
+  }
+  prevHigherNode->next = lowerNode;
 
-	_Node* tempNode = lowerNode->next;
-	lowerNode->next = higherNode->next;
-	higherNode->next = tempNode;
+  _Node *tempNode = lowerNode->next;
+  lowerNode->next = higherNode->next;
+  higherNode->next = tempNode;
 }
