@@ -8,12 +8,13 @@
       "args": [
         "-fdiagnostics-color=always",
         "-g",
-        "${fileDirname}/*.c",
+        "${fileDirname}/${fileBasename}",
+        "${workspaceFolder}/list/*.c", // Include our libraries
         "-o",
-        "${fileDirname}/${fileBasenameNoExtension}.out"
+        "${workspaceFolder}/build/${fileBasenameNoExtension}.out"
       ],
       "options": {
-        "cwd": "${fileDirname}"
+        "cwd": "${workspaceFolder}"
       },
       "problemMatcher": [
         "$gcc"
