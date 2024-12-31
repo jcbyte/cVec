@@ -31,16 +31,24 @@ void test_create_empty(void)
 
 void test_create(void)
 {
-  List l = lst_create();
-
+  List l = lst_create((int[]){}, 0);
   assert_size(l, 0);
+  lst_destroy(&l);
 
+  l = lst_create((int[]){42}, 1);
+  assert_size(l, 1);
+  assert_list_values(l, (int[]){42}, 1);
+  lst_destroy(&l);
+
+  l = lst_create((int[]){1, 2, 3, 4, 5, 6}, 6);
+  assert_size(l, 6);
+  assert_list_values(l, (int[]){1, 2, 3, 4, 5, 6}, 6);
   lst_destroy(&l);
 }
 
 void test_push_front(void)
 {
-  List l = lst_create();
+  List l = lst_create_empty();
 
   lst_push_front(&l, 2);
   assert_size(l, 1);
@@ -55,7 +63,7 @@ void test_push_front(void)
 
 void test_push_back(void)
 {
-  List l = lst_create();
+  List l = lst_create_empty();
 
   lst_push_back(&l, 1);
   assert_size(l, 1);
@@ -70,7 +78,7 @@ void test_push_back(void)
 
 void test_insert(void)
 {
-  List l = lst_create();
+  List l = lst_create_empty();
 
   // Test inserting list out of bounds with empty list
   lst_insert(&l, 99, 7);
