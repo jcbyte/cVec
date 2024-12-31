@@ -20,6 +20,15 @@ void assert_list_values(List l, int *expected_values, size_t length)
   }
 }
 
+void test_create_empty(void)
+{
+  List l = lst_create_empty();
+
+  assert_size(l, 0);
+
+  lst_destroy(&l);
+}
+
 void test_create(void)
 {
   List l = lst_create();
@@ -126,6 +135,7 @@ int main()
   }
 
   if (
+      (CU_add_test(suite_create, "Test create_empty", test_create_empty) == NULL) ||
       (CU_add_test(suite_create, "Test create", test_create) == NULL) ||
       (CU_add_test(suite_insert, "Test push_front", test_push_front) == NULL) ||
       (CU_add_test(suite_insert, "Test push_back", test_push_back) == NULL) ||
