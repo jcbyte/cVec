@@ -4,7 +4,7 @@
 
 int main()
 {
-  List lst = lst_create();
+  List lst = lst_create((int[]){99, 45}, 2);
 
   lst_push_back(&lst, 2);
   lst_push_back(&lst, 4);

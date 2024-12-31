@@ -1,15 +1,5 @@
 #include "list.h"
 
-List lst_create()
-{
-  return (List){NULL, 0};
-}
-
-void lst_destroy(List *lst)
-{
-  lst_clear(lst);
-}
-
 static _Node *_lst_create_node(int data)
 {
   _Node *node = malloc(sizeof(_Node));
@@ -26,12 +16,44 @@ static void _lst_destroy_node(_Node *node)
 static _Node *_lst_get_node_forward(_Node *node, size_t forward)
 {
   _Node *forwardNode = node;
-  for (int i = 0; i < forward; i++)
+  for (size_t i = 0; i < forward; i++)
   {
     forwardNode = forwardNode->next;
   }
 
   return forwardNode;
+}
+
+List lst_create_empty()
+{
+  return (List){NULL, 0};
+}
+
+List lst_create(int *values, size_t length)
+{
+  List lst = lst_create_empty();
+
+  if (values == NULL || length == 0)
+  {
+    return lst;
+  }
+
+  _Node *node = _lst_create_node(values[0]);
+  lst._start = node;
+  for (size_t i = 1; i < length; i++)
+  {
+    _Node *nextNode = _lst_create_node(values[i]);
+    node->next = nextNode;
+    node = nextNode;
+  }
+  lst.size = length;
+
+  return lst;
+}
+
+void lst_destroy(List *lst)
+{
+  lst_clear(lst);
 }
 
 void lst_push_front(List *lst, int value)

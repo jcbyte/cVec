@@ -15,7 +15,8 @@ typedef struct
   size_t size;
 } List;
 
-List lst_create();
+List lst_create_empty();
+List lst_create(int *values, size_t length);
 void lst_destroy(List *lst);
 
 void lst_push_front(List *lst, int value);
