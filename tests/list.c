@@ -25,6 +25,8 @@ void test_create(void)
   List l = lst_create();
 
   assert_size(l, 0);
+
+  lst_destroy(&l);
 }
 
 void test_push_front(void)
@@ -38,6 +40,8 @@ void test_push_front(void)
   lst_push_front(&l, 1);
   assert_size(l, 2);
   assert_list_values(l, (int[]){1, 2}, 2);
+
+  lst_destroy(&l);
 }
 
 void test_push_back(void)
@@ -51,6 +55,8 @@ void test_push_back(void)
   lst_push_back(&l, 2);
   assert_size(l, 2);
   assert_list_values(l, (int[]){1, 2}, 2);
+
+  lst_destroy(&l);
 }
 
 void test_insert(void)
@@ -84,6 +90,8 @@ void test_insert(void)
   // Test inserting list at negative position
   lst_insert(&l, 99, -1);
   assert_size(l, 4);
+
+  lst_destroy(&l);
 }
 
 int main()

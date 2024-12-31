@@ -16,7 +16,7 @@ typedef struct
 } List;
 
 List lst_create();
-// todo list delete + add to end of all tests
+void lst_destroy(List *lst);
 
 void lst_push_front(List *lst, int value);
 void lst_push_back(List *lst, int value);
@@ -30,6 +30,7 @@ int lst_remove_at(List *lst, size_t position);
 int lst_at(List lst, size_t position);
 void lst_print(List lst);
 
+void lst_clear(List *lst);
 int lst_front(List lst);
 int lst_end(List lst);
 size_t lst_size(List lst);
