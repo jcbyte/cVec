@@ -312,8 +312,32 @@ void test_clear(void)
   lst_destroy(&l);
 }
 
-void test_front(void) {}
-void test_end(void) {}
+void test_front(void)
+{
+  // Test empty list
+  List l = lst_create_empty();
+  CU_ASSERT_EQUAL(lst_front(l), NULL);
+  lst_destroy(&l);
+
+  // Expected test
+  l = lst_create((int[]){1, 2, 3, 4, 5}, 5);
+  CU_ASSERT_EQUAL(lst_front(l), 1);
+  lst_destroy(&l);
+}
+
+void test_end(void)
+{
+  // Test empty list
+  List l = lst_create_empty();
+  CU_ASSERT_EQUAL(lst_end(l), NULL);
+  lst_destroy(&l);
+
+  // Expected test
+  l = lst_create((int[]){1, 2, 3, 4, 5}, 5);
+  CU_ASSERT_EQUAL(lst_end(l), 5);
+  lst_destroy(&l);
+}
+
 void test_size(void)
 {
   // These are done using internal structure as our helper functions use lst_at
