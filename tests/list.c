@@ -1,16 +1,26 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
+#include "../list/list.h"
 
-void test_addition(void)
+void test_create(void)
 {
-  CU_ASSERT(2 + 2 == 4);
-  CU_ASSERT_EQUAL(3 + 3, 6);
+  List l = lst_create();
+
+  CU_ASSERT_EQUAL(lst_size(l), 0);
 }
 
-void test_subtraction(void)
+void test_push_front(void)
 {
-  CU_ASSERT(2 - 1 == 1);
-  CU_ASSERT_EQUAL(2 - 2, -1); // Test failure
+  List l = lst_create();
+
+  lst_push_front(&l, 2);
+  CU_ASSERT_EQUAL(lst_size(l), 1);
+  CU_ASSERT_EQUAL(lst_at(l, 0), 2);
+
+  lst_push_front(&l, 1);
+  CU_ASSERT_EQUAL(lst_size(l), 2);
+  CU_ASSERT_EQUAL(lst_at(l, 0), 1);
+  CU_ASSERT_EQUAL(lst_at(l, 1), 2);
 }
 
 int main()
@@ -25,8 +35,8 @@ int main()
   }
 
   if (
-      (CU_add_test(suite, "Test addition", test_addition) == NULL) ||
-      (CU_add_test(suite, "Test subtraction", test_subtraction) == NULL))
+      (CU_add_test(suite, "Test create", test_create) == NULL) ||
+      (CU_add_test(suite, "Test push_front", test_push_front) == NULL))
   {
     CU_cleanup_registry();
     return CU_get_error();
