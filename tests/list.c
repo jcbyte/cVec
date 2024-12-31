@@ -361,7 +361,23 @@ void test_size(void)
   CU_ASSERT_EQUAL(lst_size(l), 5);
   lst_destroy(&l);
 }
-void test_empty(void) {}
+
+void test_empty(void)
+{
+  // Expected tests
+  List l = lst_create_empty();
+  CU_ASSERT_TRUE(lst_empty(l));
+  lst_destroy(&l);
+
+  l = lst_create((int[]){1}, 1);
+  CU_ASSERT_FALSE(lst_empty(l));
+  lst_destroy(&l);
+
+  l = lst_create((int[]){1, 2, 3, 4, 5}, 5);
+  CU_ASSERT_FALSE(lst_empty(l));
+  lst_destroy(&l);
+}
+
 void test_swap(void) {}
 
 int main()
