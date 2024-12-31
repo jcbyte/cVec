@@ -11,7 +11,8 @@
         "${fileDirname}/${fileBasename}",
         "${workspaceFolder}/list/*.c", // Include our libraries
         "-o",
-        "${workspaceFolder}/build/${fileBasenameNoExtension}.out"
+        "${workspaceFolder}/build/${fileBasenameNoExtension}.out",
+        "-lcunit"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
