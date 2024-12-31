@@ -23,6 +23,20 @@ void test_push_front(void)
   CU_ASSERT_EQUAL(lst_at(l, 1), 2);
 }
 
+void test_push_back(void)
+{
+  List l = lst_create();
+
+  lst_push_back(&l, 1);
+  CU_ASSERT_EQUAL(lst_size(l), 1);
+  CU_ASSERT_EQUAL(lst_at(l, 0), 1);
+
+  lst_push_back(&l, 2);
+  CU_ASSERT_EQUAL(lst_size(l), 2);
+  CU_ASSERT_EQUAL(lst_at(l, 0), 1);
+  CU_ASSERT_EQUAL(lst_at(l, 1), 2);
+}
+
 int main()
 {
   CU_initialize_registry();
