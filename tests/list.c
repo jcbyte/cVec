@@ -22,15 +22,15 @@ void assert_list_values(List l, int *expected_values, size_t length)
 
 void test_create_empty(void)
 {
+  // Expected test
   List l = lst_create_empty();
-
   assert_size(l, 0);
-
   lst_destroy(&l);
 }
 
 void test_create(void)
 {
+  // Expected tests
   List l = lst_create((int[]){}, 0);
   assert_size(l, 0);
   lst_destroy(&l);
@@ -48,6 +48,7 @@ void test_create(void)
 
 void test_push_front(void)
 {
+  // Expected tests
   List l = lst_create_empty();
 
   lst_push_front(&l, 2);
@@ -63,6 +64,7 @@ void test_push_front(void)
 
 void test_push_back(void)
 {
+  // Expected tests
   List l = lst_create_empty();
 
   lst_push_back(&l, 1);
@@ -84,6 +86,7 @@ void test_insert(void)
   lst_insert(&l, 99, 7);
   assert_size(l, 0);
 
+  // Expected tests
   lst_insert(&l, 3, 0);
   assert_size(l, 1);
   assert_list_values(l, (int[]){3}, 1);
@@ -111,10 +114,43 @@ void test_insert(void)
   lst_destroy(&l);
 }
 
-void test_pop_front(void);
-void test_pop_back(void);
+void test_pop_front(void)
+{
+  // Test removing with 1 element
+  List l = lst_create((int[]){1}, 1);
+  CU_ASSERT_EQUAL(lst_pop_front(&l), 1);
+  assert_size(l, 0);
+  // Test removing with 0 elements
+  CU_ASSERT_EQUAL(lst_pop_front(&l), NULL);
+  assert_size(l, 0);
+
+  // Expected test
+  l = lst_create((int[]){1, 2, 3}, 3);
+  CU_ASSERT_EQUAL(lst_pop_front(&l), 1);
+  assert_size(l, 2);
+  assert_list_values(l, (int[]){2, 3}, 2);
+}
+
+void test_pop_back(void)
+{
+  // Test removing with 1 element
+  List l = lst_create((int[]){1}, 1);
+  CU_ASSERT_EQUAL(lst_pop_back(&l), 1);
+  assert_size(l, 0);
+  // Test removing with 0 elements
+  CU_ASSERT_EQUAL(lst_pop_back(&l), NULL);
+  assert_size(l, 0);
+
+  // Expected test
+  l = lst_create((int[]){1, 2, 3}, 3);
+  CU_ASSERT_EQUAL(lst_pop_back(&l), 3);
+  assert_size(l, 2);
+  assert_list_values(l, (int[]){1, 2}, 2);
+}
+
 void test_remove(void);
 void test_remove_at(void);
+
 void test_at(void);
 void test_print(void);
 void tst_clear(void);
