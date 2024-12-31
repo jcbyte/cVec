@@ -277,18 +277,18 @@ int main()
       (CU_add_test(suite_insert, "Test push_front", test_push_front) == NULL) ||
       (CU_add_test(suite_insert, "Test push_back", test_push_back) == NULL) ||
       (CU_add_test(suite_insert, "Test insert", test_insert) == NULL) ||
-      (CU_add_test(suite_remove, "Test pop_front", test_insert) == NULL) ||
-      (CU_add_test(suite_remove, "Test pop_back", test_insert) == NULL) ||
-      (CU_add_test(suite_remove, "Test remove", test_insert) == NULL) ||
-      (CU_add_test(suite_remove, "Test remove_at", test_insert) == NULL) ||
-      (CU_add_test(suite_util, "Test at", test_insert) == NULL) ||
-      (CU_add_test(suite_util, "Test print", test_insert) == NULL) ||
-      (CU_add_test(suite_util, "Test clear", test_insert) == NULL) ||
-      (CU_add_test(suite_util, "Test front", test_insert) == NULL) ||
-      (CU_add_test(suite_util, "Test end", test_insert) == NULL) ||
-      (CU_add_test(suite_util, "Test size", test_insert) == NULL) ||
-      (CU_add_test(suite_util, "Test empty", test_insert) == NULL) ||
-      (CU_add_test(suite_util, "Test swap", test_insert) == NULL))
+      (CU_add_test(suite_remove, "Test pop_front", test_pop_front) == NULL) ||
+      (CU_add_test(suite_remove, "Test pop_back", test_pop_back) == NULL) ||
+      (CU_add_test(suite_remove, "Test remove", test_remove) == NULL) ||
+      (CU_add_test(suite_remove, "Test remove_at", test_remove_at) == NULL) ||
+      (CU_add_test(suite_util, "Test at", test_at) == NULL) ||
+      (CU_add_test(suite_util, "Test print", test_print) == NULL) ||
+      (CU_add_test(suite_util, "Test clear", test_clear) == NULL) ||
+      (CU_add_test(suite_util, "Test front", test_front) == NULL) ||
+      (CU_add_test(suite_util, "Test end", test_end) == NULL) ||
+      (CU_add_test(suite_util, "Test size", test_size) == NULL) ||
+      (CU_add_test(suite_util, "Test empty", test_empty) == NULL) ||
+      (CU_add_test(suite_util, "Test swap", test_swap) == NULL))
   {
     CU_cleanup_registry();
     return CU_get_error();
