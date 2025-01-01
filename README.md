@@ -2,9 +2,11 @@
 
 This project provides a basic implementation of a singly linked list in C.
 
+Soon to include a Vector!
+
 ## Installation
 
-_todo: Need to work out how to package_
+_todo: Need to work out how to package._
 
 ## Usage
 
