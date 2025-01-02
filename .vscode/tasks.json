@@ -10,7 +10,8 @@
       ],
       "options": {
         "env": {
-          "WORKSPACE": "${workspaceFolder}"
+          "WORKSPACE": "${workspaceFolder}",
+          "GCC_ARGS": "-lcunit" // Include this when building so we can run test files directly
         }
       },
       "problemMatcher": [
