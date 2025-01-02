@@ -8,10 +8,10 @@ export GCC_ARGS="-lcunit -fprofile-arcs -ftest-coverage"
 ./build.sh $1
 
 # Run the tests reporting to an xml file
-./build/test_list.out build/test_list
+./build/test_list.out build/test-list
 # Prettify the test results
 mkdir -p "build/test-reports"
-xsltproc cunit-to-html.xsl build/test_list-Results.xml > build/test-reports/test_list-Results.html
+xsltproc cunit-report.xsl build/test-list-Results.xml > build/test-reports/test-list-report.html
 
 # Generate coverage information
 cd build
