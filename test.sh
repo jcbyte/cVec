@@ -3,6 +3,8 @@
 # Exit on error
 set -e  
 
+# todo do this for all .c files in ./tests/
+
 # Build specified test file with GCC args for testing and coverage
 export GCC_ARGS="-lcunit -fprofile-arcs -ftest-coverage"
 ./build.sh $1

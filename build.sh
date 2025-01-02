@@ -5,7 +5,7 @@
 # Variables
 GCC="/usr/bin/gcc"
 OUTPUT_DIR="${WORKSPACE}/build"
-LIB=("${WORKSPACE}/list/"*.c "${WORKSPACE}/vector/"*.c)
+LIB=("${WORKSPACE}/list/list.c" "${WORKSPACE}/vector/vector.c")
 
 # Ensure output directory exists
 mkdir -p "$OUTPUT_DIR"
