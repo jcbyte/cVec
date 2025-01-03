@@ -3,29 +3,45 @@
 # Exit on error
 set -e  
 
-# todo do this for all .c files in ./tests/
+: ${WORKSPACE:=$PWD}
+OUTPUT_DIR="${WORKSPACE}/build"
 
-# Build specified test file with GCC args for testing and coverage
+# Ensure output directory's exists
+mkdir -p "$OUTPUT_DIR"
+mkdir -p "$OUTPUT_DIR/test-reports"
+mkdir -p "$OUTPUT_DIR/valgrind-reports"
+mkdir -p "$OUTPUT_DIR/coverage-report"
+
+# todo if $1 then only run on that test
+
+# Specify GCC args for testing and coverage
 export GCC_ARGS="-lcunit -fprofile-arcs -ftest-coverage"
-./build.sh $1
 
-# Run valgrind to test for memory leaks 
-# Run the tests reporting to an xml file
-valgrind --leak-check=full --xml=yes --xml-file=build/test-list-valgrind-report.xml ./build/test_list.out build/test-list
-# Prettify valgrind results
-mkdir -p "build/valgrind-reports"
-xsltproc valgrind-report.xsl build/test-list-valgrind-report.xml > build/valgrind-reports/test-list-valgrind-report.html
-# Prettify the test results
-mkdir -p "build/test-reports"
-xsltproc cunit-report.xsl build/test-list-Results.xml > build/test-reports/test-list-report.html
+# Build and run all tests
+for file in $(find tests/ -name "*.c"); do
+    test_name=$(basename $file .c)
+
+    # Build specified test file
+    ./build.sh $file
+    complied_test="$OUTPUT_DIR/${test_name}.out"
+
+    # Run valgrind to test for memory leaks 
+    # Run the tests reporting to an xml file
+    valgrind_report="$OUTPUT_DIR/${test_name}-valgrind-report.xml"
+    valgrind --leak-check=full --xml=yes --xml-file=$valgrind_report $complied_test "$OUTPUT_DIR/$test_name"
+    test_report="$OUTPUT_DIR/${test_name}-Results.xml"
+    # Prettify the test results
+    xsltproc cunit-report.xsl $test_report > "$OUTPUT_DIR/test-reports/$test_name-report.html"
+    # Prettify valgrind results
+    xsltproc valgrind-report.xsl $valgrind_report > "$OUTPUT_DIR/valgrind-reports/$test_name-valgrind-report.html"
+done
 
 # Generate coverage information
-cd build
+cd $OUTPUT_DIR
 gcov *.gcno
 cd ..
 
 # Generate coverage report
-lcov --capture --directory build --output-file build/coverage.info
+lcov --capture --directory $OUTPUT_DIR --output-file $OUTPUT_DIR/coverage.info
 # Prettify the coverage results
-mkdir -p "build/coverage-report"
-genhtml build/coverage.info --output-directory build/coverage-report
+genhtml $OUTPUT_DIR/coverage.info --output-directory $OUTPUT_DIR/coverage-report
