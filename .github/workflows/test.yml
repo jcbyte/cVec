@@ -16,8 +16,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: |
+        apt update
+        apt install gcc
+        apt install libcunit1-dev
+        apt install valgrind
+        apt install xsltproc
+        apt install lcov
+
       - name: Run Tests
-        if: always() # Always run checkstyle
+        if: always() # Always run the tests
         run: ./test.sh
 
       - name: Upload Test Reports
