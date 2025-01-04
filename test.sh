@@ -3,7 +3,8 @@
 : ${WORKSPACE:=$PWD}
 OUTPUT_DIR="${WORKSPACE}/build"
 
-# todo put errors in array and print all of them
+# List of errors occurred during testing
+test_errors=()
 
 # Ensure output directory's exists
 mkdir -p "$OUTPUT_DIR"
@@ -29,7 +30,7 @@ for file in "${files[@]}"; do
     ./build.sh $file
     # If build fails, log and skip to next test
     if [ $? -ne 0 ]; then
-        ERROR_FLAG="$test_name could not be built"
+        test_errors+=("\033[1;37m$test_name\033[0m failed building.")
         continue
     fi
     compiled_test="$OUTPUT_DIR/${test_name}.out"
@@ -41,10 +42,10 @@ for file in "${files[@]}"; do
     # If either the tests or valgrind fail, log
     valgrind_exit_code=$?
     if [ $valgrind_exit_code -eq 1 ]; then
-        ERROR_FLAG="$test_name failed tests"
+        test_errors+=("\033[1;37m$test_name\033[0m failed tests.")
     fi
     if [ $valgrind_exit_code -eq 2 ]; then
-        ERROR_FLAG="$test_name failed valgrind test"
+        test_errors+=("\033[1;37m$test_name\033[0m failed valgrind test.")
     fi
     test_report="$OUTPUT_DIR/${test_name}-Results.xml"
     # Prettify the test results
@@ -63,8 +64,15 @@ lcov --capture --directory $OUTPUT_DIR --output-file $OUTPUT_DIR/coverage.info
 # Prettify the coverage results
 genhtml $OUTPUT_DIR/coverage.info --output-directory $OUTPUT_DIR/coverage-report
 
-# If there was an error, print it and exit with error code
-if [ -n "$ERROR_FLAG" ]; then
-    echo "Last error: $ERROR_FLAG"
-    exit 1
+# Display success or display errors
+if [ ${#test_errors[@]} -eq 0 ]; then
+  echo -e "\n\033[1;32mTest(s) successful.\033[0m"
+else
+  echo -e "\n\033[1;31mTest(s) unsuccessful:\033[0m"
+  # Display errors
+  for test_error in "${test_errors[@]}"; do
+    echo -e "  - $test_error"
+  done
+  echo
+  exit 1
 fi
