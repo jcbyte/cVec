@@ -1,10 +1,9 @@
 #!/bin/bash
 
-# Exit on error
-set -e  
-
 : ${WORKSPACE:=$PWD}
 OUTPUT_DIR="${WORKSPACE}/build"
+
+# todo put errors in array and print all of them
 
 # Ensure output directory's exists
 mkdir -p "$OUTPUT_DIR"
@@ -28,12 +27,25 @@ for file in "${files[@]}"; do
 
     # Build specified test file
     ./build.sh $file
+    # If build fails, log and skip to next test
+    if [ $? -ne 0 ]; then
+        ERROR_FLAG="$test_name could not be built"
+        continue
+    fi
     compiled_test="$OUTPUT_DIR/${test_name}.out"
 
     # Run valgrind to test for memory leaks 
     # Run the tests reporting to an xml file
     valgrind_report="$OUTPUT_DIR/${test_name}-valgrind-report.xml"
-    valgrind --leak-check=full --xml=yes --xml-file=$valgrind_report $compiled_test "$OUTPUT_DIR/$test_name"
+    valgrind --error-exitcode=2 --leak-check=full --xml=yes --xml-file=$valgrind_report $compiled_test "$OUTPUT_DIR/$test_name"
+    # If either the tests or valgrind fail, log
+    valgrind_exit_code=$?
+    if [ $valgrind_exit_code -eq 1 ]; then
+        ERROR_FLAG="$test_name failed tests"
+    fi
+    if [ $valgrind_exit_code -eq 2 ]; then
+        ERROR_FLAG="$test_name failed valgrind test"
+    fi
     test_report="$OUTPUT_DIR/${test_name}-Results.xml"
     # Prettify the test results
     xsltproc cunit-report.xsl $test_report > "$OUTPUT_DIR/test-reports/$test_name-report.html"
@@ -50,3 +62,9 @@ cd ..
 lcov --capture --directory $OUTPUT_DIR --output-file $OUTPUT_DIR/coverage.info
 # Prettify the coverage results
 genhtml $OUTPUT_DIR/coverage.info --output-directory $OUTPUT_DIR/coverage-report
+
+# If there was an error, print it and exit with error code
+if [ -n "$ERROR_FLAG" ]; then
+    echo "Last error: $ERROR_FLAG"
+    exit 1
+fi
