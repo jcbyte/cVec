@@ -509,6 +509,8 @@ int main(int argc, char *argv[])
     CU_automated_run_tests();
   }
 
+  int failures = CU_get_number_of_tests_failed();
   CU_cleanup_registry();
-  return CU_get_error();
+
+  return failures > 0 ? 1 : 0;
 }
