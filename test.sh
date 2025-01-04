@@ -66,7 +66,7 @@ genhtml $OUTPUT_DIR/coverage.info --output-directory $OUTPUT_DIR/coverage-report
 
 # Display success or display errors
 if [ ${#test_errors[@]} -eq 0 ]; then
-  echo -e "\n\033[1;32mTest(s) successful.\033[0m"
+  echo -e "\n\033[1;32mTest(s) successful.\033[0m\n"
 else
   echo -e "\n\033[1;31mTest(s) unsuccessful:\033[0m"
   # Display errors
