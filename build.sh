@@ -3,7 +3,6 @@
 : ${WORKSPACE:=$PWD}
 
 # Variables
-GCC="/usr/bin/gcc"
 OUTPUT_DIR="${WORKSPACE}/build"
 LIB=("${WORKSPACE}/list/list.c" "${WORKSPACE}/vector/vector.c")
 
@@ -12,7 +11,7 @@ mkdir -p "$OUTPUT_DIR"
 
 # Compile the file
 OUTPUT_FILE="${OUTPUT_DIR}/$(basename "$1" .c).out"
-$GCC -fdiagnostics-color=always -g "$1" "${LIB[@]}" -o $OUTPUT_FILE $GCC_ARGS
+gcc -fdiagnostics-color=always -g "$1" "${LIB[@]}" -o $OUTPUT_FILE $GCC_ARGS
 
 # Display success and give path to built file
 if [ $? -eq 0 ]; then
