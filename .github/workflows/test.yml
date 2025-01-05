@@ -22,8 +22,10 @@ jobs:
           sudo apt update
           sudo apt install -y gcc libcunit1-dev valgrind xsltproc lcov
 
-      - name: Grant Execute Permissions for Test script
-        run: chmod +x ./test.sh
+      - name: Grant Execute Permissions for scripts
+        run: |
+          chmod +x ./build.sh
+          chmod +x ./test.sh
 
       - name: Run Tests
         if: always() # Always run the tests
