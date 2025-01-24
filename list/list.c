@@ -26,7 +26,7 @@ static _Node *_lst_get_node_forward(_Node *node, size_t forward)
 
 List lst_create_empty()
 {
-  return (List){NULL, 0};
+  return (List){NULL, 0, NULL};
 }
 
 List lst_create(int *values, size_t length)
@@ -46,10 +46,13 @@ List lst_create(int *values, size_t length)
     node->next = nextNode;
     node = nextNode;
   }
+  lst._end = node;
   lst.size = length;
 
   return lst;
 }
+
+// todo continue refactoring below
 
 void lst_destroy(List *lst)
 {

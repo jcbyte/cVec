@@ -4,7 +4,7 @@
 
 int main()
 {
-  // todo example code
+  List l = lst_create((int[]) {3, 2}, 2);
   
   return 0;
 }
