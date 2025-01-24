@@ -219,10 +219,9 @@ int lst_remove_at(List *lst, size_t position)
   return data;
 }
 
-// todo continue refactoring below
 int lst_at(List lst, size_t position)
 {
-  if (lst.size <= position)
+  if (position < 0 || lst.size <= position)
   {
     return NULL;
   }
@@ -282,8 +281,7 @@ int lst_end(List lst)
     return NULL;
   }
 
-  _Node *lastNode = _lst_get_node_forward(lst._start, lst.size - 1);
-  return lastNode->data;
+  return lst._end->data;
 }
 
 size_t lst_size(List lst)
@@ -306,7 +304,7 @@ void lst_swap(List *lst, size_t position1, size_t position2)
   size_t lowerPos = (position1 <= position2) ? position1 : position2;
   size_t higherPos = (position1 > position2) ? position1 : position2;
 
-  if (lst->size <= higherPos)
+  if (lowerPos < 0 || lst->size <= higherPos)
   {
     return;
   }
@@ -341,4 +339,9 @@ void lst_swap(List *lst, size_t position1, size_t position2)
   _Node *tempNode = lowerNode->next;
   lowerNode->next = higherNode->next;
   higherNode->next = tempNode;
+
+  if (higherPos == lst->size - 1)
+  {
+    lst->_end = lowerNode;
+  }
 }

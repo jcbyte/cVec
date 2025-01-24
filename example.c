@@ -4,9 +4,11 @@
 
 int main()
 {
-  List l = lst_create((int[]) {10, 20, 30}, 3);
-  int r = lst_remove_at(&l, -1);
+  List l = lst_create((int[]) {1, 2, 3}, 3);
 
+  // todo exmaple code
   lst_print(l);
+  
+  lst_destroy(&l);
   return 0;
 }
