@@ -14,7 +14,7 @@ mkdir -p "$OUTPUT_DIR/coverage-report"
 
 # Run specific test if argument is passed
 if [[ -n "$1" ]]; then
-    files=("tests/$1.c")
+    files=($1)
 else
     files=($(find tests/ -name "*.c"))
 fi
