@@ -13,6 +13,7 @@ typedef struct
 {
   _Node *_start;
   size_t size;
+  _Node *_end;
 } List;
 
 List lst_create_empty();
