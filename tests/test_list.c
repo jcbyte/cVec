@@ -160,31 +160,31 @@ void test_remove(void)
 {
   // Test removing unknown with 1 element
   List l = lst_create((int[]){1}, 1);
-  CU_ASSERT_EQUAL(lst_remove(&l, 2), NULL);
+  CU_ASSERT_FALSE(lst_remove(&l, 2));
   assert_size(l, 1);
 
   // Test removing with 1 element
-  CU_ASSERT_EQUAL(lst_remove(&l, 1), 1);
+  CU_ASSERT_TRUE(lst_remove(&l, 1));
   assert_size(l, 0);
 
   // Test removing with 0 elements
-  CU_ASSERT_EQUAL(lst_remove(&l, 2), NULL);
+  CU_ASSERT_FALSE(lst_remove(&l, 2));
   assert_size(l, 0);
   lst_destroy(&l);
 
   // Test removing unknown with multiple elements
   l = lst_create((int[]){1, 2, 3, 3, 4}, 5);
-  CU_ASSERT_EQUAL(lst_remove(&l, 10), NULL);
+  CU_ASSERT_FALSE(lst_remove(&l, 10));
   assert_size(l, 5);
   assert_list_values(l, (int[]){1, 2, 3, 3, 4}, 5);
 
   // Test removing value where multiple exist
-  CU_ASSERT_EQUAL(lst_remove(&l, 3), 3);
+  CU_ASSERT_TRUE(lst_remove(&l, 3));
   assert_size(l, 4);
   assert_list_values(l, (int[]){1, 2, 3, 4}, 4);
 
   // Expected test
-  CU_ASSERT_EQUAL(lst_remove(&l, 2), 2);
+  CU_ASSERT_TRUE(lst_remove(&l, 2));
   assert_size(l, 3);
   assert_list_values(l, (int[]){1, 3, 4}, 3);
 

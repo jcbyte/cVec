@@ -4,7 +4,11 @@
 
 int main()
 {
-  // todo example code
+  List l = lst_create((int[]) {1, 2, 3}, 3);
+
+  // todo exmaple code
+  lst_print(l);
   
+  lst_destroy(&l);
   return 0;
 }

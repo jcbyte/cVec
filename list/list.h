@@ -3,16 +3,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct
+typedef struct _Node
 {
   int data;
   struct _Node *next;
 } _Node;
 
-typedef struct
+typedef struct List
 {
   _Node *_start;
   size_t size;
+  _Node *_end;
 } List;
 
 List lst_create_empty();
