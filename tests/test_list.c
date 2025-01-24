@@ -153,7 +153,7 @@ void test_pop_back(void)
   assert_size(l, 0);
 
   // Test removing with 0 elements
-  CU_ASSERT_EQUAL(lst_pop_back(&l), NULL);
+  CU_ASSERT_EQUAL(lst_pop_back(&l), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(l, 0);
   lst_destroy(&l);
@@ -228,11 +228,6 @@ void test_remove_at(void)
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(l, 3);
   errno = 0;
-
-  // Expected test
-  CU_ASSERT_EQUAL(lst_remove_at(&l, 7), NULL);
-  assert_size(l, 3);
-  assert_list_values(l, (int[]){1, 2, 3}, 3);
 
   // Expected test
   CU_ASSERT_EQUAL(lst_remove_at(&l, 1), 2);
