@@ -1,4 +1,6 @@
 #include "list.h"
+#include <setjmp.h>
+#include <errno.h>
 
 static _Node *_lst_create_node(int data)
 {
@@ -90,8 +92,9 @@ void lst_push_back(List *lst, int value)
 
 void lst_insert(List *lst, int value, size_t position)
 {
-  if (lst->size < position)
+  if (position < 0 || lst->size < position)
   {
+    errno = EINVAL;
     return;
   }
 
@@ -116,7 +119,8 @@ int lst_pop_front(List *lst)
 {
   if (lst_empty(*lst))
   {
-    return NULL;
+    errno = EINVAL;
+    return -1; // Note: -1 could also be returned on success
   }
 
   _Node *firstNode = lst->_start;
@@ -132,7 +136,8 @@ int lst_pop_back(List *lst)
 {
   if (lst_empty(*lst))
   {
-    return NULL;
+    errno = EINVAL;
+    return -1; // Note: -1 could also be returned on success
   }
 
   _Node *lastNode;
@@ -195,7 +200,8 @@ int lst_remove_at(List *lst, size_t position)
 {
   if (position < 0 || lst->size <= position)
   {
-    return NULL;
+    errno = EINVAL;
+    return -1; // Note: -1 could also be returned on success
   }
 
   if (position == 0)
@@ -222,7 +228,8 @@ int lst_at(List lst, size_t position)
 {
   if (position < 0 || lst.size <= position)
   {
-    return NULL;
+    errno = EINVAL;
+    return -1; // Note: -1 could also be returned on success
   }
 
   _Node *node = _lst_get_node_forward(lst._start, position);
@@ -267,7 +274,8 @@ int lst_front(List lst)
 {
   if (lst_empty(lst))
   {
-    return NULL;
+    errno = EINVAL;
+    return -1; // Note: -1 could also be returned on success
   }
 
   return lst._start->data;
@@ -277,7 +285,8 @@ int lst_end(List lst)
 {
   if (lst_empty(lst))
   {
-    return NULL;
+    errno = EINVAL;
+    return -1; // Note: -1 could also be returned on success
   }
 
   return lst._end->data;
@@ -305,6 +314,7 @@ void lst_swap(List *lst, size_t position1, size_t position2)
 
   if (lowerPos < 0 || lst->size <= higherPos)
   {
+    errno = EINVAL;
     return;
   }
 
