@@ -95,8 +95,6 @@ void lst_insert(List *lst, int value, size_t position)
     return;
   }
 
-  _Node *newNode = _lst_create_node(value);
-
   if (position == 0)
   {
     return lst_push_front(lst, value);
@@ -106,6 +104,7 @@ void lst_insert(List *lst, int value, size_t position)
     return lst_push_back(lst, value);
   }
 
+  _Node *newNode = _lst_create_node(value);
   _Node *nodeAt = _lst_get_node_forward(lst->_start, position - 1);
   newNode->next = nodeAt->next;
   nodeAt->next = newNode;
