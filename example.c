@@ -4,7 +4,9 @@
 
 int main()
 {
-  List l = lst_create((int[]) {3, 2}, 2);
-  
+  List l = lst_create((int[]) {2, 3}, 0);
+  lst_push_back(&l, 1);
+
+  lst_print(l);
   return 0;
 }
