@@ -90,7 +90,6 @@ void lst_push_back(List *lst, int value)
   lst->size++;
 }
 
-// todo continue refactoring below
 void lst_insert(List *lst, int value, size_t position)
 {
   if (lst->size < position)
@@ -102,17 +101,20 @@ void lst_insert(List *lst, int value, size_t position)
 
   if (position == 0)
   {
-    newNode->next = lst->_start;
-    lst->_start = newNode;
+    lst_push_front(lst, value);
+  }
+  else if (position == lst->size)
+  {
+    lst_push_back(lst, value);
   }
   else
   {
     _Node *nodeAt = _lst_get_node_forward(lst->_start, position - 1);
     newNode->next = nodeAt->next;
     nodeAt->next = newNode;
-  }
 
-  lst->size++;
+    lst->size++;
+  }
 }
 
 int lst_pop_front(List *lst)
@@ -143,12 +145,14 @@ int lst_pop_back(List *lst)
   {
     lastNode = lst->_start;
     lst->_start = NULL;
+    lst->_end = NULL;
   }
   else
   {
     _Node *prevLastNode = _lst_get_node_forward(lst->_start, lst->size - 1 - 1);
     lastNode = prevLastNode->next;
     prevLastNode->next = NULL;
+    lst->_end = prevLastNode;
   }
 
   int data = lastNode->data;
@@ -157,6 +161,7 @@ int lst_pop_back(List *lst)
   return data;
 }
 
+// todo continue refactoring below
 int lst_remove(List *lst, int value)
 {
   _Node *prevNode = NULL;
