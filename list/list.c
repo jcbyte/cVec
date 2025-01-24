@@ -52,12 +52,10 @@ List lst_create(int *values, size_t length)
   return lst;
 }
 
-
 void lst_destroy(List *lst)
 {
   lst_clear(lst);
 }
-
 
 void lst_push_front(List *lst, int value)
 {
@@ -101,20 +99,18 @@ void lst_insert(List *lst, int value, size_t position)
 
   if (position == 0)
   {
-    lst_push_front(lst, value);
+    return lst_push_front(lst, value);
   }
-  else if (position == lst->size)
+  if (position == lst->size)
   {
-    lst_push_back(lst, value);
+    return lst_push_back(lst, value);
   }
-  else
-  {
-    _Node *nodeAt = _lst_get_node_forward(lst->_start, position - 1);
-    newNode->next = nodeAt->next;
-    nodeAt->next = newNode;
 
-    lst->size++;
-  }
+  _Node *nodeAt = _lst_get_node_forward(lst->_start, position - 1);
+  newNode->next = nodeAt->next;
+  nodeAt->next = newNode;
+
+  lst->size++;
 }
 
 int lst_pop_front(List *lst)
@@ -161,7 +157,6 @@ int lst_pop_back(List *lst)
   return data;
 }
 
-// todo continue refactoring below
 int lst_remove(List *lst, int value)
 {
   _Node *prevNode = NULL;
@@ -180,36 +175,43 @@ int lst_remove(List *lst, int value)
         prevNode->next = currentNode->next;
       }
 
-      int data = currentNode->data;
+      if (currentNode->next == NULL)
+      {
+        lst->_end = prevNode;
+      }
+
       _lst_destroy_node(currentNode);
       lst->size--;
-      return data;
+      return 1; // true
     }
 
     prevNode = currentNode;
     currentNode = currentNode->next;
   }
+
+  return 0; // false
 }
 
 int lst_remove_at(List *lst, size_t position)
 {
-  if (lst->size <= position)
+  if (position < 0 || lst->size <= position)
   {
     return NULL;
   }
 
-  _Node *nodeToDelete;
   if (position == 0)
   {
-    nodeToDelete = lst->_start;
-    lst->_start = nodeToDelete->next;
+    return lst_pop_front(lst);
   }
-  else
+  if (position == lst->size - 1)
   {
-    _Node *prevNode = _lst_get_node_forward(lst->_start, position - 1);
-    nodeToDelete = prevNode->next;
-    prevNode->next = nodeToDelete->next;
+    return lst_pop_back(lst);
   }
+
+  _Node *nodeToDelete;
+  _Node *prevNode = _lst_get_node_forward(lst->_start, position - 1);
+  nodeToDelete = prevNode->next;
+  prevNode->next = nodeToDelete->next;
 
   int data = nodeToDelete->data;
   _lst_destroy_node(nodeToDelete);
@@ -217,6 +219,7 @@ int lst_remove_at(List *lst, size_t position)
   return data;
 }
 
+// todo continue refactoring below
 int lst_at(List lst, size_t position)
 {
   if (lst.size <= position)
