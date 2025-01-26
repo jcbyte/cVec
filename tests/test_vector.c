@@ -2,6 +2,8 @@
 #include <CUnit/Basic.h>
 #include <CUnit/Automated.h>
 
+// todo implement vector tests
+
 void test_sanity(void)
 {
   // Expected tests

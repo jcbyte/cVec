@@ -5,7 +5,7 @@
 
 int main()
 {
-  // todo create examples
+  // todo create example list
   List l = lst_create((int[]) {1, 2, 3}, 3);
 
   lst_insert(&l, 4, 10);

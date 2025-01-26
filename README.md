@@ -12,9 +12,9 @@ _todo: Need to work out how to package._
 
 ## Usage
 
-Example code given in [example.c](./example.c).
+Example code given shown in [examples](./examples).
 
-- Functions in the linked list can be found in [list.h](./list/list.h) and act similarly to to [std::vector](https://en.cppreference.com/w/cpp/container/vector#Member_functions).
+Function definitions can be found in there respective `.h` files and act similarly to to [std::vector](https://en.cppreference.com/w/cpp/container/vector#Member_functions).
 
 ## Testing
 
