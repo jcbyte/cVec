@@ -1,6 +1,7 @@
-#include "list.h"
-#include <setjmp.h>
+#include "../include/list.h"
+
 #include <errno.h>
+#include <stdio.h>
 
 static _Node *_lst_create_node(int data)
 {

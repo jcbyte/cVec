@@ -2,7 +2,7 @@
 #include <CUnit/Basic.h>
 #include <CUnit/Automated.h>
 #include <unistd.h>
-#include "../list/list.h"
+#include "../include/list.h"
 #include <errno.h>
 
 void assert_size(List lst, size_t expected_size)
