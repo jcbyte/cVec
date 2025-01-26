@@ -4,7 +4,7 @@
 
 # Variables
 OUTPUT_DIR="${WORKSPACE}/build"
-LIB=("${WORKSPACE}/list/list.c" "${WORKSPACE}/vector/vector.c")
+LIB=("${WORKSPACE}/src/list.c" "${WORKSPACE}/src/vector.c")
 
 # Ensure output directory exists
 mkdir -p "$OUTPUT_DIR"
