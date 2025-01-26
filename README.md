@@ -2,19 +2,19 @@
 
 This project provides a basic implementation of a singly linked list in C.
 
-Soon to include a Vector!
+_Soon to include a Vector!_
 
 Fully implemented testing and CI using GitHub actions.
 
 ## Installation
 
-_todo: Need to work out how to package._
+Precompiled binaries are available in [Releases](https://github.com/jcbyte/cVec/releases), these contain both static and shared libraries for Linux.
 
 ## Usage
 
-Example code given in [example.c](./example.c).
+Example usage can be seen in the [examples](./examples) directory.
 
-- Functions in the linked list can be found in [list.h](./list/list.h) and act similarly to to [std::vector](https://en.cppreference.com/w/cpp/container/vector#Member_functions).
+Function definitions are available there respective `.h` files and the API acts similarly to [std::vector](https://en.cppreference.com/w/cpp/container/vector#Member_functions)'s.
 
 ## Testing
 
