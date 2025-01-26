@@ -19,17 +19,13 @@ jobs:
           sudo apt-get install -y gcc
 
       - name: Grant Execute Permissions for scripts
-        run: |
-          chmod +x ./compile.sh
+        run: chmod +x ./compile.sh
 
       - name: Run compile script
-        run: |
-          ./compile.sh
+        run: ./compile.sh
 
-      - name: Create directory for release
-        run: |
-          mkdir release
-          cp -r include lib release/
+      - name: Create release archive
+        run: tar -czf release.tar.gz -C . include -C . lib
 
       - name: Create Release
         id: create-release
@@ -42,12 +38,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload APK to Release
+      - name: Upload to Release
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
           asset_path: ${{ github.workspace }}/release
           asset_name: release
-          asset_content_type: application/zip
+          asset_content_type: application/gzip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
