@@ -8,9 +8,9 @@ int main()
   // Vector v = vec_create_empty();
   Vector v = vec_create((int[]){10, 20, 40}, 3);
   vec_print(v);
-  vec_remove_at(&v, 0);
+  int a = vec_remove(&v, 40);
   vec_print(v);
 
-  printf("\n\n");
+  printf("%d\n\n", a);
   return 0;
 }

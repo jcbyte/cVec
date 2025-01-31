@@ -128,8 +128,18 @@ int vec_pop_back(Vector *vec)
   return vec->_arr[vec->size];
 }
 
-// todo implementation
-int vec_remove(Vector *vec, int value) {}
+int vec_remove(Vector *vec, int value) {
+  for (int i = 0; i < vec->size; i++)
+  {
+    if (vec->_arr[i] == value)
+    {
+      vec_remove_at(vec, i);
+      return 1; // true
+    }
+  }
+
+  return 0; // false
+}
 
 int vec_remove_at(Vector *vec, size_t position) {
     if (position < 0 || vec->size <= position)
