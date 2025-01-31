@@ -1,7 +1,9 @@
+#include "../include/vector.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "../include/vector.h"
+#include <errno.h>
 
 Vector vec_create_empty()
 {
@@ -32,6 +34,12 @@ int vec_remove_at(Vector *vec, size_t position) {}
 
 int vec_at(Vector vec, size_t position)
 {
+  if (position < 0 || vec.size <= position)
+  {
+    errno = EINVAL;
+    return -1; // Note: -1 could also be returned on success
+  }
+
   return vec._arr[position];
 }
 
@@ -58,11 +66,23 @@ void vec_clear(Vector *vec)
 
 int vec_front(Vector vec)
 {
+  if (vec_empty(vec))
+  {
+    errno = EINVAL;
+    return -1; // Note: -1 could also be returned on success
+  }
+
   return vec._arr[0];
 }
 
 int vec_end(Vector vec)
 {
+  if (vec_empty(vec))
+  {
+    errno = EINVAL;
+    return -1; // Note: -1 could also be returned on success
+  }
+
   return vec._arr[vec.size - 1];
 }
 
