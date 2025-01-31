@@ -1,8 +1,6 @@
 # cVec
 
-This project provides a basic implementation of a singly linked list in C.
-
-_Soon to include a Vector!_
+This project provides a basic implementation of a dynamic array (vector) singly linked list (list) in C.
 
 Fully implemented testing and CI using GitHub actions.
 
