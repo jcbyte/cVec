@@ -5,6 +5,8 @@
 
 int main()
 {
-  // todo create example vector
+  // Vector v = vec_create_empty();
+  Vector v = vec_create((int[]){10, 20, 40}, 3);
+
   return 0;
 }
