@@ -86,36 +86,36 @@ void test_insert(void)
   List l = lst_create_empty();
 
   // Test inserting list out of bounds with empty list
-  lst_insert(&l, 99, 7);
+  CU_ASSERT_EQUAL(lst_insert(&l, 99, 7), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(l, 0);
   errno = 0;
 
   // Expected tests
-  lst_insert(&l, 3, 0);
+  CU_ASSERT_EQUAL(lst_insert(&l, 3, 0), 0);
   assert_size(l, 1);
   assert_list_values(l, (int[]){3}, 1);
 
-  lst_insert(&l, 1, 0);
+  CU_ASSERT_EQUAL(lst_insert(&l, 1, 0), 0);
   assert_size(l, 2);
   assert_list_values(l, (int[]){1, 3}, 2);
 
-  lst_insert(&l, 2, 1);
+  CU_ASSERT_EQUAL(lst_insert(&l, 2, 1), 0);
   assert_size(l, 3);
   assert_list_values(l, (int[]){1, 2, 3}, 3);
 
-  lst_insert(&l, 4, 3);
+  CU_ASSERT_EQUAL(lst_insert(&l, 4, 3), 0);
   assert_size(l, 4);
   assert_list_values(l, (int[]){1, 2, 3, 4}, 4);
 
   // Test inserting list out of bounds with filled list
-  lst_insert(&l, 99, 5);
+  CU_ASSERT_EQUAL(lst_insert(&l, 99, 5), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(l, 4);
   errno = 0;
 
   // Test inserting list at negative position
-  lst_insert(&l, 99, -1);
+  CU_ASSERT_EQUAL(lst_insert(&l, 99, -1), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(l, 4);
   errno = 0;
@@ -415,93 +415,93 @@ void test_swap(void)
 {
   // Test empty list
   List l = lst_create_empty();
-  lst_swap(&l, 0, 0);
+  CU_ASSERT_EQUAL(lst_swap(&l, 0, 0), 0);
   assert_size(l, 0);
   lst_destroy(&l);
 
   // Test list with 1 element
   l = lst_create((int[]){1}, 1);
-  lst_swap(&l, 0, 0);
+  CU_ASSERT_EQUAL(lst_swap(&l, 0, 0), 0);
   assert_size(l, 1);
   assert_list_values(l, (int[]){1}, 1);
   lst_destroy(&l);
 
   // Test list with 2 elements
   l = lst_create((int[]){1, 2}, 2);
-  lst_swap(&l, 1, 0);
+  CU_ASSERT_EQUAL(lst_swap(&l, 1, 0), 0);
   assert_size(l, 2);
   assert_list_values(l, (int[]){2, 1}, 2);
   lst_destroy(&l);
 
   // Test position 1 out of bounds
   l = lst_create((int[]){1, 2, 3, 4, 5}, 5);
-  lst_swap(&l, 12, 1);
+  CU_ASSERT_EQUAL(lst_swap(&l, 12, 1), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(l, 5);
   assert_list_values(l, (int[]){1, 2, 3, 4, 5}, 5);
   errno = 0;
 
   // Test position 1 negative
-  lst_swap(&l, -1, 1);
+  CU_ASSERT_EQUAL(lst_swap(&l, -1, 1), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(l, 5);
   assert_list_values(l, (int[]){1, 2, 3, 4, 5}, 5);
   errno = 0;
 
   // Test position 2 out of bounds
-  lst_swap(&l, 2, 7);
+  CU_ASSERT_EQUAL(lst_swap(&l, 2, 7), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(l, 5);
   assert_list_values(l, (int[]){1, 2, 3, 4, 5}, 5);
   errno = 0;
 
   // Test position 2 negative
-  lst_swap(&l, 3, -1);
+  CU_ASSERT_EQUAL(lst_swap(&l, 3, -1), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(l, 5);
   assert_list_values(l, (int[]){1, 2, 3, 4, 5}, 5);
   errno = 0;
 
   // Test both positions out of bounds
-  lst_swap(&l, 12, 7);
+  CU_ASSERT_EQUAL(lst_swap(&l, 12, 7), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(l, 5);
   assert_list_values(l, (int[]){1, 2, 3, 4, 5}, 5);
   errno = 0;
 
   // Test both positions negative
-  lst_swap(&l, -2, -1);
+  CU_ASSERT_EQUAL(lst_swap(&l, -2, -1), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(l, 5);
   assert_list_values(l, (int[]){1, 2, 3, 4, 5}, 5);
   errno = 0;
 
   // Test same position
-  lst_swap(&l, 2, 2);
+  CU_ASSERT_EQUAL(lst_swap(&l, 2, 2), 0);
   assert_size(l, 5);
   assert_list_values(l, (int[]){1, 2, 3, 4, 5}, 5);
 
   // Test end to end
-  lst_swap(&l, 0, 4);
+  CU_ASSERT_EQUAL(lst_swap(&l, 0, 4), 0);
   assert_size(l, 5);
   assert_list_values(l, (int[]){5, 2, 3, 4, 1}, 5);
 
   // Test adjacent elements at the start
-  lst_swap(&l, 0, 1);
+  CU_ASSERT_EQUAL(lst_swap(&l, 0, 1), 0);
   assert_size(l, 5);
   assert_list_values(l, (int[]){2, 5, 3, 4, 1}, 5);
 
   // Test adjacent elements at the end
-  lst_swap(&l, 3, 4);
+  CU_ASSERT_EQUAL(lst_swap(&l, 3, 4), 0);
   assert_size(l, 5);
   assert_list_values(l, (int[]){2, 5, 3, 1, 4}, 5);
 
   // Expected tests
-  lst_swap(&l, 0, 2);
+  CU_ASSERT_EQUAL(lst_swap(&l, 0, 2), 0);
   assert_size(l, 5);
   assert_list_values(l, (int[]){3, 5, 2, 1, 4}, 5);
 
-  lst_swap(&l, 3, 1);
+  CU_ASSERT_EQUAL(lst_swap(&l, 3, 1), 0);
   assert_size(l, 5);
   assert_list_values(l, (int[]){3, 1, 2, 5, 4}, 5);
 

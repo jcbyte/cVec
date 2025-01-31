@@ -91,21 +91,23 @@ void lst_push_back(List *lst, int value)
   lst->size++;
 }
 
-void lst_insert(List *lst, int value, size_t position)
+int lst_insert(List *lst, int value, size_t position)
 {
   if (position < 0 || lst->size < position)
   {
     errno = EINVAL;
-    return;
+    return -1;
   }
 
   if (position == 0)
   {
-    return lst_push_front(lst, value);
+    lst_push_front(lst, value);
+    return 0;
   }
   if (position == lst->size)
   {
-    return lst_push_back(lst, value);
+    lst_push_back(lst, value);
+    return 0;
   }
 
   _Node *newNode = _lst_create_node(value);
@@ -114,6 +116,7 @@ void lst_insert(List *lst, int value, size_t position)
   nodeAt->next = newNode;
 
   lst->size++;
+  return 0;
 }
 
 int lst_pop_front(List *lst)
@@ -303,11 +306,11 @@ int lst_empty(List lst)
   return lst.size == 0;
 }
 
-void lst_swap(List *lst, size_t position1, size_t position2)
+int lst_swap(List *lst, size_t position1, size_t position2)
 {
   if (position1 == position2)
   {
-    return;
+    return 0;
   }
 
   size_t lowerPos = (position1 <= position2) ? position1 : position2;
@@ -316,7 +319,7 @@ void lst_swap(List *lst, size_t position1, size_t position2)
   if (lowerPos < 0 || lst->size <= higherPos)
   {
     errno = EINVAL;
-    return;
+    return -1;
   }
 
   _Node *prevLowerNode;
@@ -354,4 +357,6 @@ void lst_swap(List *lst, size_t position1, size_t position2)
   {
     lst->_end = lowerNode;
   }
+
+  return 0;
 }
