@@ -49,7 +49,6 @@ void test_create(void)
   vec_destroy(&v);
 }
 
-
 void test_push_front(void)
 {
   // Expected tests
@@ -123,7 +122,6 @@ void test_insert(void)
 
   vec_destroy(&v);
 }
-
 
 void test_pop_front(void)
 {
@@ -243,7 +241,6 @@ void test_remove_at(void)
 
   vec_destroy(&v);
 }
-
 
 void test_at(void)
 {
@@ -398,6 +395,54 @@ void test_size(void)
   vec_destroy(&v);
 }
 
+void test_capacity(void)
+{
+  // Expected tests
+  Vector v = vec_create_empty();
+  CU_ASSERT_EQUAL(vec_capacity(v), 0);
+  vec_destroy(&v);
+
+  v = vec_create((int[]){1}, 1);
+  CU_ASSERT_TRUE(vec_capacity(v) >= 1);
+  vec_push_back(&v, 2);
+  CU_ASSERT_TRUE(vec_capacity(v) >= 2);
+  vec_destroy(&v);
+
+  v = vec_create((int[]){1, 2, 3, 4, 5}, 5);
+  CU_ASSERT_TRUE(vec_capacity(v) >= 5);
+  vec_push_back(&v, 6);
+  CU_ASSERT_TRUE(vec_capacity(v) >= 6);
+  vec_destroy(&v);
+}
+
+void test_shrink_to_fit(void)
+{
+  // Test with empty vector
+  Vector v = vec_create_empty();
+  vec_shrink_to_fit(&v);
+  CU_ASSERT_EQUAL(vec_capacity(v), 0);
+  vec_push_back(&v, 1);
+  vec_shrink_to_fit(&v);
+  CU_ASSERT_EQUAL(vec_capacity(v), 1);
+  vec_pop_back(&v);
+  vec_shrink_to_fit(&v);
+  CU_ASSERT_EQUAL(vec_capacity(v), 0);
+  vec_destroy(&v);
+
+  // Expected tests
+  v = vec_create((int[]){1}, 1);
+  vec_push_back(&v, 2);
+  vec_shrink_to_fit(&v);
+  CU_ASSERT_EQUAL(vec_capacity(v), 2);
+  vec_destroy(&v);
+
+  v = vec_create((int[]){1, 2, 3, 4, 5}, 5);
+  vec_push_back(&v, 6);
+  vec_shrink_to_fit(&v);
+  CU_ASSERT_EQUAL(vec_capacity(v), 6);
+  vec_destroy(&v);
+}
+
 void test_empty(void)
 {
   // Expected tests
@@ -540,15 +585,15 @@ int main(int argc, char *argv[])
       (CU_add_test(suite_remove, "Test pop_front", test_pop_front) == NULL) ||
       (CU_add_test(suite_remove, "Test pop_back", test_pop_back) == NULL) ||
       (CU_add_test(suite_remove, "Test remove", test_remove) == NULL) ||
-      (CU_add_test(suite_remove, "Test remove_at", test_remove_at) == NULL)|
-      (CU_add_test(suite_util, "Test at", test_at) == NULL) ||
+      (CU_add_test(suite_remove, "Test remove_at", test_remove_at) == NULL) |
+          (CU_add_test(suite_util, "Test at", test_at) == NULL) ||
       (CU_add_test(suite_util, "Test print", test_print) == NULL) ||
       (CU_add_test(suite_util, "Test clear", test_clear) == NULL) ||
       (CU_add_test(suite_util, "Test front", test_front) == NULL) ||
       (CU_add_test(suite_util, "Test end", test_end) == NULL) ||
       (CU_add_test(suite_util, "Test size", test_size) == NULL) ||
-      // (CU_add_test(suite_util, "Test capacity", test_capacity) == NULL) ||
-      // (CU_add_test(suite_util, "Test shrink_to_fit", test_shrink_to_fit) == NULL) ||
+      (CU_add_test(suite_util, "Test capacity", test_capacity) == NULL) ||
+      (CU_add_test(suite_util, "Test shrink_to_fit", test_shrink_to_fit) == NULL) ||
       (CU_add_test(suite_util, "Test empty", test_empty) == NULL) ||
       (CU_add_test(suite_util, "Test swap", test_swap) == NULL))
   {
