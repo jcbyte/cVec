@@ -39,9 +39,10 @@ void vec_push_front(Vector *vec, int value)
   if (vec->capacity <= vec->size)
   {
     size_t new_capacity = _vec_get_next_capacity(vec->capacity);
-    int *new_arr = malloc(sizeof(int) * new_capacity);
 
+    int *new_arr = malloc(sizeof(int) * new_capacity);
     memcpy(new_arr + 1, vec->_arr, sizeof(int) * vec->size);
+
     free(vec->_arr);
     vec->_arr = new_arr;
     vec->capacity = new_capacity;
@@ -72,8 +73,34 @@ void vec_push_back(Vector *vec, int value)
   vec->size++;
 }
 
-// todo implementation
-void vec_insert(Vector *vec, int value, size_t position) {}
+void vec_insert(Vector *vec, int value, size_t position)
+{
+  if (position < 0 || vec->size < position)
+  {
+    errno = EINVAL;
+    return;
+  }
+
+  if (vec->capacity <= vec->size)
+  {
+    size_t new_capacity = _vec_get_next_capacity(vec->capacity);
+
+    int *new_arr = malloc(sizeof(int) * new_capacity);
+    memcpy(new_arr, vec->_arr, sizeof(int) * (position));
+    memcpy(new_arr + position + 1, vec->_arr + position, sizeof(int) * (vec->size - position));
+
+    free(vec->_arr);
+    vec->_arr = new_arr;
+    vec->capacity = new_capacity;
+  }
+  else
+  {
+    memmove(vec->_arr + position + 1, vec->_arr + position, sizeof(int) * (vec->size - position));
+  }
+
+  vec->_arr[position] = value;
+  vec->size++;
+}
 
 int vec_pop_front(Vector *vec)
 {
@@ -105,7 +132,9 @@ int vec_pop_back(Vector *vec)
 int vec_remove(Vector *vec, int value) {}
 
 // todo implementation
-int vec_remove_at(Vector *vec, size_t position) {}
+int vec_remove_at(Vector *vec, size_t position) {
+  
+}
 
 int vec_at(Vector vec, size_t position)
 {
