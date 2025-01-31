@@ -23,10 +23,30 @@ void assert_vector_values(Vector vec, int *expected_values, size_t length)
   }
 }
 
-void test_sanity(void)
+void test_create_empty(void)
+{
+  // Expected test
+  Vector v = vec_create_empty();
+  assert_size(v, 0);
+  vec_destroy(&v);
+}
+
+void test_create(void)
 {
   // Expected tests
-  CU_ASSERT_TRUE(1);
+  Vector v = vec_create((int[]){}, 0);
+  assert_size(v, 0);
+  vec_destroy(&v);
+
+  v = vec_create((int[]){42}, 1);
+  assert_size(v, 1);
+  assert_vector_values(v, (int[]){42}, 1);
+  vec_destroy(&v);
+
+  v = vec_create((int[]){1, 2, 3, 4, 5, 6}, 6);
+  assert_size(v, 6);
+  assert_vector_values(v, (int[]){1, 2, 3, 4, 5, 6}, 6);
+  vec_destroy(&v);
 }
 
 int main(int argc, char *argv[])
@@ -34,9 +54,15 @@ int main(int argc, char *argv[])
   CU_initialize_registry();
 
   // Create test suites
-  CU_pSuite suite = CU_add_suite("Vector Test Suite", NULL, NULL);
+  CU_pSuite suite_create = CU_add_suite("Vector Creation Test Suite", NULL, NULL);
+  CU_pSuite suite_insert = CU_add_suite("Vector Insertion Test Suite", NULL, NULL);
+  CU_pSuite suite_remove = CU_add_suite("Vector Removal Test Suite", NULL, NULL);
+  CU_pSuite suite_util = CU_add_suite("Vector Util Test Suite", NULL, NULL);
   if (
-      (suite == NULL))
+      (suite_create == NULL) ||
+      (suite_insert == NULL) ||
+      (suite_remove == NULL) ||
+      (suite_util == NULL))
   {
     CU_cleanup_registry();
     return CU_get_error();
@@ -44,7 +70,23 @@ int main(int argc, char *argv[])
 
   // Add tests to suites
   if (
-      (CU_add_test(suite, "Test sanity", test_sanity) == NULL))
+      (CU_add_test(suite_create, "Test create_empty", test_create_empty) == NULL) ||
+      (CU_add_test(suite_create, "Test create", test_create) == NULL))
+      // (CU_add_test(suite_insert, "Test push_front", test_push_front) == NULL) ||
+      // (CU_add_test(suite_insert, "Test push_back", test_push_back) == NULL) ||
+      // (CU_add_test(suite_insert, "Test insert", test_insert) == NULL) ||
+      // (CU_add_test(suite_remove, "Test pop_front", test_pop_front) == NULL) ||
+      // (CU_add_test(suite_remove, "Test pop_back", test_pop_back) == NULL) ||
+      // (CU_add_test(suite_remove, "Test remove", test_remove) == NULL) ||
+      // (CU_add_test(suite_remove, "Test remove_at", test_remove_at) == NULL) ||
+      // (CU_add_test(suite_util, "Test at", test_at) == NULL) ||
+      // (CU_add_test(suite_util, "Test print", test_print) == NULL) ||
+      // (CU_add_test(suite_util, "Test clear", test_clear) == NULL) ||
+      // (CU_add_test(suite_util, "Test front", test_front) == NULL) ||
+      // (CU_add_test(suite_util, "Test end", test_end) == NULL) ||
+      // (CU_add_test(suite_util, "Test size", test_size) == NULL) ||
+      // (CU_add_test(suite_util, "Test empty", test_empty) == NULL) ||
+      // (CU_add_test(suite_util, "Test swap", test_swap) == NULL))
   {
     CU_cleanup_registry();
     return CU_get_error();
