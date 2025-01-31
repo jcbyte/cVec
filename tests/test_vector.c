@@ -49,6 +49,81 @@ void test_create(void)
   vec_destroy(&v);
 }
 
+
+void test_push_front(void)
+{
+  // Expected tests
+  Vector v = vec_create_empty();
+
+  vec_push_front(&v, 2);
+  assert_size(v, 1);
+  assert_vector_values(v, (int[]){2}, 1);
+
+  vec_push_front(&v, 1);
+  assert_size(v, 2);
+  assert_vector_values(v, (int[]){1, 2}, 2);
+
+  vec_destroy(&v);
+}
+
+void test_push_back(void)
+{
+  // Expected tests
+  Vector v = vec_create_empty();
+
+  vec_push_back(&v, 1);
+  assert_size(v, 1);
+  assert_vector_values(v, (int[]){1}, 1);
+
+  vec_push_back(&v, 2);
+  assert_size(v, 2);
+  assert_vector_values(v, (int[]){1, 2}, 2);
+
+  vec_destroy(&v);
+}
+
+void test_insert(void)
+{
+  Vector v = vec_create_empty();
+
+  // Test inserting list out of bounds with empty list
+  vec_insert(&v, 99, 7);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  assert_size(v, 0);
+  errno = 0;
+
+  // Expected tests
+  vec_insert(&v, 3, 0);
+  assert_size(v, 1);
+  assert_vector_values(v, (int[]){3}, 1);
+
+  vec_insert(&v, 1, 0);
+  assert_size(v, 2);
+  assert_vector_values(v, (int[]){1, 3}, 2);
+
+  vec_insert(&v, 2, 1);
+  assert_size(v, 3);
+  assert_vector_values(v, (int[]){1, 2, 3}, 3);
+
+  vec_insert(&v, 4, 3);
+  assert_size(v, 4);
+  assert_vector_values(v, (int[]){1, 2, 3, 4}, 4);
+
+  // Test inserting list out of bounds with filled list
+  vec_insert(&v, 99, 5);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  assert_size(v, 4);
+  errno = 0;
+
+  // Test inserting list at negative position
+  vec_insert(&v, 99, -1);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  assert_size(v, 4);
+  errno = 0;
+
+  vec_destroy(&v);
+}
+
 int main(int argc, char *argv[])
 {
   CU_initialize_registry();
@@ -71,10 +146,10 @@ int main(int argc, char *argv[])
   // Add tests to suites
   if (
       (CU_add_test(suite_create, "Test create_empty", test_create_empty) == NULL) ||
-      (CU_add_test(suite_create, "Test create", test_create) == NULL))
-      // (CU_add_test(suite_insert, "Test push_front", test_push_front) == NULL) ||
-      // (CU_add_test(suite_insert, "Test push_back", test_push_back) == NULL) ||
-      // (CU_add_test(suite_insert, "Test insert", test_insert) == NULL) ||
+      (CU_add_test(suite_create, "Test create", test_create) == NULL) ||
+      (CU_add_test(suite_insert, "Test push_front", test_push_front) == NULL) ||
+      (CU_add_test(suite_insert, "Test push_back", test_push_back) == NULL) ||
+      (CU_add_test(suite_insert, "Test insert", test_insert) == NULL))// ||
       // (CU_add_test(suite_remove, "Test pop_front", test_pop_front) == NULL) ||
       // (CU_add_test(suite_remove, "Test pop_back", test_pop_back) == NULL) ||
       // (CU_add_test(suite_remove, "Test remove", test_remove) == NULL) ||
