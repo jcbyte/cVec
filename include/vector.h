@@ -57,7 +57,7 @@ void vec_push_back(Vector *vec, int value);
  * @param value The value to insert.
  * @param position The position at which to insert the value.
  */
-void vec_insert(Vector *vec, int value, size_t position);
+int vec_insert(Vector *vec, int value, size_t position);
 
 /**
  * @brief Removes and returns the element at the front of the vector.
@@ -180,4 +180,4 @@ int vec_empty(Vector vec);
  * @param position1 The first position to swap.
  * @param position2 The second position to swap.
  */
-void vec_swap(Vector *vec, size_t position1, size_t position2);
+int vec_swap(Vector *vec, size_t position1, size_t position2);

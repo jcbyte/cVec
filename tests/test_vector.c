@@ -91,36 +91,36 @@ void test_insert(void)
   Vector v = vec_create_empty();
 
   // Test inserting out of bounds with empty vector
-  vec_insert(&v, 99, 7);
+  CU_ASSERT_EQUAL(vec_insert(&v, 99, 7), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(v, 0);
   errno = 0;
 
   // Expected tests
-  vec_insert(&v, 3, 0);
+  CU_ASSERT_EQUAL(vec_insert(&v, 3, 0), 0);
   assert_size(v, 1);
   assert_vector_values(v, (int[]){3}, 1);
 
-  vec_insert(&v, 1, 0);
+  CU_ASSERT_EQUAL(vec_insert(&v, 1, 0), 0);
   assert_size(v, 2);
   assert_vector_values(v, (int[]){1, 3}, 2);
 
-  vec_insert(&v, 2, 1);
+  CU_ASSERT_EQUAL(vec_insert(&v, 2, 1), 0);
   assert_size(v, 3);
   assert_vector_values(v, (int[]){1, 2, 3}, 3);
 
-  vec_insert(&v, 4, 3);
+  CU_ASSERT_EQUAL(vec_insert(&v, 4, 3), 0);
   assert_size(v, 4);
   assert_vector_values(v, (int[]){1, 2, 3, 4}, 4);
 
   // Test inserting out of bounds with filled vector
-  vec_insert(&v, 99, 5);
+  CU_ASSERT_EQUAL(vec_insert(&v, 99, 5), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(v, 4);
   errno = 0;
 
   // Test inserting at negative position
-  vec_insert(&v, 99, -1);
+  CU_ASSERT_EQUAL(vec_insert(&v, 99, -1), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(v, 4);
   errno = 0;
@@ -468,93 +468,93 @@ void test_swap(void)
 {
   // Test empty vector
   Vector v = vec_create_empty();
-  vec_swap(&v, 0, 0);
+  CU_ASSERT_EQUAL(vec_swap(&v, 0, 0), 0);
   assert_size(v, 0);
   vec_destroy(&v);
 
   // Test vector with 1 element
   v = vec_create((int[]){1}, 1);
-  vec_swap(&v, 0, 0);
+  CU_ASSERT_EQUAL(vec_swap(&v, 0, 0), 0);
   assert_size(v, 1);
   assert_vector_values(v, (int[]){1}, 1);
   vec_destroy(&v);
 
   // Test vector with 2 elements
   v = vec_create((int[]){1, 2}, 2);
-  vec_swap(&v, 1, 0);
+  CU_ASSERT_EQUAL(vec_swap(&v, 1, 0), 0);
   assert_size(v, 2);
   assert_vector_values(v, (int[]){2, 1}, 2);
   vec_destroy(&v);
 
   // Test position 1 out of bounds
   v = vec_create((int[]){1, 2, 3, 4, 5}, 5);
-  vec_swap(&v, 12, 1);
+  CU_ASSERT_EQUAL(vec_swap(&v, 12, 1), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(v, 5);
   assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
   errno = 0;
 
   // Test position 1 negative
-  vec_swap(&v, -1, 1);
+  CU_ASSERT_EQUAL(vec_swap(&v, -1, 1), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(v, 5);
   assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
   errno = 0;
 
   // Test position 2 out of bounds
-  vec_swap(&v, 2, 7);
+  CU_ASSERT_EQUAL(vec_swap(&v, 2, 7), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(v, 5);
   assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
   errno = 0;
 
   // Test position 2 negative
-  vec_swap(&v, 3, -1);
+  CU_ASSERT_EQUAL(vec_swap(&v, 3, -1), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(v, 5);
   assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
   errno = 0;
 
   // Test both positions out of bounds
-  vec_swap(&v, 12, 7);
+  CU_ASSERT_EQUAL(vec_swap(&v, 12, 7), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(v, 5);
   assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
   errno = 0;
 
   // Test both positions negative
-  vec_swap(&v, -2, -1);
+  CU_ASSERT_EQUAL(vec_swap(&v, -2, -1), -1);
   CU_ASSERT_EQUAL(errno, EINVAL);
   assert_size(v, 5);
   assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
   errno = 0;
 
   // Test same position
-  vec_swap(&v, 2, 2);
+  CU_ASSERT_EQUAL(vec_swap(&v, 2, 2), 0);
   assert_size(v, 5);
   assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
 
   // Test end to end
-  vec_swap(&v, 0, 4);
+  CU_ASSERT_EQUAL(vec_swap(&v, 0, 4), 0);
   assert_size(v, 5);
   assert_vector_values(v, (int[]){5, 2, 3, 4, 1}, 5);
 
   // Test adjacent elements at the start
-  vec_swap(&v, 0, 1);
+  CU_ASSERT_EQUAL(vec_swap(&v, 0, 1), 0);
   assert_size(v, 5);
   assert_vector_values(v, (int[]){2, 5, 3, 4, 1}, 5);
 
   // Test adjacent elements at the end
-  vec_swap(&v, 3, 4);
+  CU_ASSERT_EQUAL(vec_swap(&v, 3, 4), 0);
   assert_size(v, 5);
   assert_vector_values(v, (int[]){2, 5, 3, 1, 4}, 5);
 
   // Expected tests
-  vec_swap(&v, 0, 2);
+  CU_ASSERT_EQUAL(vec_swap(&v, 0, 2), 0);
   assert_size(v, 5);
   assert_vector_values(v, (int[]){3, 5, 2, 1, 4}, 5);
 
-  vec_swap(&v, 3, 1);
+  CU_ASSERT_EQUAL(vec_swap(&v, 3, 1), 0);
   assert_size(v, 5);
   assert_vector_values(v, (int[]){3, 1, 2, 5, 4}, 5);
 

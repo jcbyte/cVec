@@ -65,7 +65,7 @@ void lst_push_back(List *lst, int value);
  * @param value The value to insert.
  * @param position The position at which to insert the value.
  */
-void lst_insert(List *lst, int value, size_t position);
+int lst_insert(List *lst, int value, size_t position);
 
 /**
  * @brief Removes and returns the element at the front of the list.
@@ -172,4 +172,4 @@ int lst_empty(List lst);
  * @param position1 The first position to swap.
  * @param position2 The second position to swap.
  */
-void lst_swap(List *lst, size_t position1, size_t position2);
+int lst_swap(List *lst, size_t position1, size_t position2);
