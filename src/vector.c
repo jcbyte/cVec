@@ -5,20 +5,14 @@
 #include <string.h>
 #include <errno.h>
 
-void _vec_extend_capacity(Vector *vec)
+size_t _vec_get_next_capacity(size_t capacity)
 {
-  size_t new_capacity = vec->capacity * 2;
-  if (new_capacity == 0)
+  if (capacity == 0)
   {
-    new_capacity = 1;
+    return 1;
   }
 
-  int* new_arr = malloc(sizeof(int) * new_capacity);
-  memcpy(new_arr, vec->_arr, sizeof(int) * vec->size);
-
-  free(vec->_arr);
-  vec->_arr = new_arr;
-  vec->capacity = new_capacity;
+  return capacity * 2;
 }
 
 Vector vec_create_empty()
@@ -40,13 +34,38 @@ void vec_destroy(Vector *vec)
   free(vec->_arr);
 }
 
-// todo implementation
-void vec_push_front(Vector *vec, int value) {}
-
-void vec_push_back(Vector *vec, int value) {
+void vec_push_front(Vector *vec, int value)
+{
   if (vec->capacity <= vec->size)
   {
-    _vec_extend_capacity(vec);
+    size_t new_capacity = _vec_get_next_capacity(vec->capacity);
+    int *new_arr = malloc(sizeof(int) * new_capacity);
+
+    memcpy(new_arr + 1, vec->_arr, sizeof(int) * vec->size);
+    free(vec->_arr);
+    vec->_arr = new_arr;
+    vec->capacity = new_capacity;
+  }
+  else
+  {
+    memmove(vec->_arr + 1, vec->_arr, sizeof(int) * vec->size);
+  }
+  vec->_arr[0] = value;
+  vec->size++;
+}
+
+void vec_push_back(Vector *vec, int value)
+{
+  if (vec->capacity <= vec->size)
+  {
+    size_t new_capacity = _vec_get_next_capacity(vec->capacity);
+
+    int *new_arr = malloc(sizeof(int) * new_capacity);
+    memcpy(new_arr, vec->_arr, sizeof(int) * vec->size);
+
+    free(vec->_arr);
+    vec->_arr = new_arr;
+    vec->capacity = new_capacity;
   }
 
   vec->_arr[vec->size] = value;
@@ -56,10 +75,22 @@ void vec_push_back(Vector *vec, int value) {
 // todo implementation
 void vec_insert(Vector *vec, int value, size_t position) {}
 
-// todo implementation
-int vec_pop_front(Vector *vec) {}
+int vec_pop_front(Vector *vec)
+{
+  if (vec_empty(*vec))
+  {
+    errno = EINVAL;
+    return -1; // Note: -1 could also be returned on success
+  }
 
-int vec_pop_back(Vector *vec) {
+  int value = vec->_arr[0];
+  vec->size--;
+  memmove(vec->_arr, vec->_arr + 1, sizeof(int) * vec->size);
+  return value;
+}
+
+int vec_pop_back(Vector *vec)
+{
   if (vec_empty(*vec))
   {
     errno = EINVAL;
@@ -139,6 +170,7 @@ size_t vec_capacity(Vector vec)
   return vec.capacity;
 }
 
+// todo implementation
 void vec_shrink_to_fit(Vector *vec) {}
 
 int vec_empty(Vector vec)
@@ -146,7 +178,8 @@ int vec_empty(Vector vec)
   return vec.size == 0;
 }
 
-void vec_swap(Vector *vec, size_t position1, size_t position2) {
+void vec_swap(Vector *vec, size_t position1, size_t position2)
+{
   if (position1 == position2)
   {
     return;

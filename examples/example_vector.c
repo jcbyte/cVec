@@ -8,13 +8,13 @@ int main()
   Vector v = vec_create_empty();
   // Vector v = vec_create((int[]){10, 20, 40}, 3);
   vec_print(v);
-  vec_push_back(&v, 1);
+  vec_push_front(&v, 1);
   vec_print(v);
-  vec_push_back(&v, 2);
+  vec_push_front(&v, 2);
   vec_print(v);
-  vec_push_back(&v, 3);
+  vec_push_front(&v, 3);
   vec_print(v);
-  vec_swap(&v, 0, 2);
+  int a = vec_pop_front(&v);
   vec_print(v);
 
   printf("\n\n");
