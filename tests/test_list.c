@@ -10,16 +10,16 @@ void assert_size(List lst, size_t expected_size)
   CU_ASSERT_EQUAL(lst_size(lst), expected_size);
 }
 
-void assert_at(List l, size_t position, int expected_value)
+void assert_at(List lst, size_t position, int expected_value)
 {
-  CU_ASSERT_EQUAL(lst_at(l, position), expected_value);
+  CU_ASSERT_EQUAL(lst_at(lst, position), expected_value);
 }
 
-void assert_list_values(List l, int *expected_values, size_t length)
+void assert_list_values(List lst, int *expected_values, size_t length)
 {
   for (size_t i = 0; i < length; i++)
   {
-    assert_at(l, i, expected_values[i]);
+    assert_at(lst, i, expected_values[i]);
   }
 }
 

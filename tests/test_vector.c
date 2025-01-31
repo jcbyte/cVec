@@ -1,8 +1,27 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
 #include <CUnit/Automated.h>
+#include <unistd.h>
+#include "../include/vector.h"
+#include <errno.h>
 
-// todo implement vector tests
+void assert_size(Vector vec, size_t expected_size)
+{
+  CU_ASSERT_EQUAL(vec_size(vec), expected_size);
+}
+
+void assert_at(Vector vec, size_t position, int expected_value)
+{
+  CU_ASSERT_EQUAL(vec_at(vec, position), expected_value);
+}
+
+void assert_vector_values(Vector vec, int *expected_values, size_t length)
+{
+  for (size_t i = 0; i < length; i++)
+  {
+    assert_at(vec, i, expected_values[i]);
+  }
+}
 
 void test_sanity(void)
 {
