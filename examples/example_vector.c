@@ -6,11 +6,13 @@
 int main()
 {
   // Vector v = vec_create_empty();
-  Vector v = vec_create((int[]){10, 20, 40}, 3);
+  Vector v = vec_create((int[]){10, 20, 30}, 3);
   vec_print(v);
-  int a = vec_remove(&v, 40);
+  vec_push_back(&v, 40);
+  vec_print(v);
+  vec_shrink_to_fit(&v);
   vec_print(v);
 
-  printf("%d\n\n", a);
+  printf("\n\n");
   return 0;
 }

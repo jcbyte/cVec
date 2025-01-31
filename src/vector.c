@@ -128,7 +128,8 @@ int vec_pop_back(Vector *vec)
   return vec->_arr[vec->size];
 }
 
-int vec_remove(Vector *vec, int value) {
+int vec_remove(Vector *vec, int value)
+{
   for (int i = 0; i < vec->size; i++)
   {
     if (vec->_arr[i] == value)
@@ -141,8 +142,9 @@ int vec_remove(Vector *vec, int value) {
   return 0; // false
 }
 
-int vec_remove_at(Vector *vec, size_t position) {
-    if (position < 0 || vec->size <= position)
+int vec_remove_at(Vector *vec, size_t position)
+{
+  if (position < 0 || vec->size <= position)
   {
     errno = EINVAL;
     return -1; // Note: -1 could also be returned on success
@@ -217,8 +219,15 @@ size_t vec_capacity(Vector vec)
   return vec.capacity;
 }
 
-// todo implementation
-void vec_shrink_to_fit(Vector *vec) {}
+void vec_shrink_to_fit(Vector *vec)
+{
+  int *new_arr = malloc(sizeof(int) * vec->size);
+  memcpy(new_arr, vec->_arr, sizeof(int) * vec->size);
+
+  free(vec->_arr);
+  vec->_arr = new_arr;
+  vec->capacity = vec->size;
+}
 
 int vec_empty(Vector vec)
 {
