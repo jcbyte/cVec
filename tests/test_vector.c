@@ -245,6 +245,271 @@ void test_remove_at(void)
 }
 
 
+void test_at(void)
+{
+  // Test getting element from empty vector
+  Vector v = vec_create_empty();
+  CU_ASSERT_EQUAL(vec_at(v, 0), -1);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  vec_destroy(&v);
+  errno = 0;
+
+  // Test getting element out of bounds
+  v = vec_create((int[]){1, 2, 3}, 3);
+  CU_ASSERT_EQUAL(vec_at(v, 8), -1);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  errno = 0;
+
+  // Test geting negative position
+  CU_ASSERT_EQUAL(vec_at(v, -1), -1);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  errno = 0;
+
+  // Expected test
+  CU_ASSERT_EQUAL(vec_at(v, 0), 1);
+  CU_ASSERT_EQUAL(vec_at(v, 1), 2);
+  CU_ASSERT_EQUAL(vec_at(v, 2), 3);
+
+  vec_destroy(&v);
+}
+
+void test_print(void)
+{
+  // Create a pipe
+  int pipefd[2];
+  if (pipe(pipefd) == -1)
+  {
+    CU_FAIL("Failed to create pipe.");
+    return;
+  }
+
+  // Save original stdout file descriptor
+  int original_stdout = dup(fileno(stdout));
+
+  // Redirect stdout to the pipe
+  dup2(pipefd[1], fileno(stdout));
+  // Close write end of the pipe in the parent process
+  close(pipefd[1]);
+
+  // Test empty vector
+  Vector v = vec_create_empty();
+  vec_print(v);
+  // Ensure output is flushed to the pipe
+  fflush(stdout);
+
+  // Read from the pipe
+  char buffer[20] = {0};
+  read(pipefd[0], buffer, sizeof(buffer) - 1);
+
+  CU_ASSERT_STRING_EQUAL(buffer, "[]");
+  vec_destroy(&v);
+
+  // Clear buffer
+  memset(buffer, 0, sizeof(buffer));
+
+  // Test a vector with elements
+  v = vec_create((int[]){1, 2, 3, 4}, 4);
+  vec_print(v);
+  // Ensure output is flushed to the pipe
+  fflush(stdout);
+
+  // Read from the pipe
+  read(pipefd[0], buffer, sizeof(buffer) - 1);
+
+  CU_ASSERT_STRING_EQUAL(buffer, "[1, 2, 3, 4]");
+  vec_destroy(&v);
+
+  // Close read end of the pipe
+  close(pipefd[0]);
+
+  // Restore the original stdout
+  dup2(original_stdout, fileno(stdout));
+  close(original_stdout);
+}
+
+void test_clear(void)
+{
+  // Test clearing empty vector
+  Vector v = vec_create_empty();
+  vec_clear(&v);
+  assert_size(v, 0);
+  vec_destroy(&v);
+
+  // Expected test
+  v = vec_create((int[]){1, 2, 3, 4, 5}, 5);
+  vec_clear(&v);
+  assert_size(v, 0);
+  vec_destroy(&v);
+}
+
+void test_front(void)
+{
+  // Test empty vector
+  Vector v = vec_create_empty();
+  CU_ASSERT_EQUAL(vec_front(v), -1);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  vec_destroy(&v);
+  errno = 0;
+
+  // Test vector with 1 element
+  v = vec_create((int[]){2}, 1);
+  CU_ASSERT_EQUAL(vec_front(v), 2);
+  vec_destroy(&v);
+
+  // Expected test
+  v = vec_create((int[]){1, 2, 3, 4, 5}, 5);
+  CU_ASSERT_EQUAL(vec_front(v), 1);
+  vec_destroy(&v);
+}
+
+void test_end(void)
+{
+  // Test empty vector
+  Vector v = vec_create_empty();
+  CU_ASSERT_EQUAL(vec_end(v), -1);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  vec_destroy(&v);
+  errno = 0;
+
+  // Test vector with 1 element
+  v = vec_create((int[]){2}, 1);
+  CU_ASSERT_EQUAL(vec_end(v), 2);
+  vec_destroy(&v);
+
+  // Expected test
+  v = vec_create((int[]){1, 2, 3, 4, 5}, 5);
+  CU_ASSERT_EQUAL(vec_end(v), 5);
+  vec_destroy(&v);
+}
+
+void test_size(void)
+{
+  // Expected tests
+  Vector v = vec_create_empty();
+  CU_ASSERT_EQUAL(vec_size(v), 0);
+  vec_destroy(&v);
+
+  v = vec_create((int[]){1}, 1);
+  CU_ASSERT_EQUAL(vec_size(v), 1);
+  vec_destroy(&v);
+
+  v = vec_create((int[]){1, 2, 3, 4, 5}, 5);
+  CU_ASSERT_EQUAL(vec_size(v), 5);
+  vec_destroy(&v);
+}
+
+void test_empty(void)
+{
+  // Expected tests
+  Vector v = vec_create_empty();
+  CU_ASSERT_TRUE(vec_empty(v));
+  vec_destroy(&v);
+
+  v = vec_create((int[]){1}, 1);
+  CU_ASSERT_FALSE(vec_empty(v));
+  vec_destroy(&v);
+
+  v = vec_create((int[]){1, 2, 3, 4, 5}, 5);
+  CU_ASSERT_FALSE(vec_empty(v));
+  vec_destroy(&v);
+}
+
+void test_swap(void)
+{
+  // Test empty vector
+  Vector v = vec_create_empty();
+  vec_swap(&v, 0, 0);
+  assert_size(v, 0);
+  vec_destroy(&v);
+
+  // Test vector with 1 element
+  v = vec_create((int[]){1}, 1);
+  vec_swap(&v, 0, 0);
+  assert_size(v, 1);
+  assert_vector_values(v, (int[]){1}, 1);
+  vec_destroy(&v);
+
+  // Test vector with 2 elements
+  v = vec_create((int[]){1, 2}, 2);
+  vec_swap(&v, 1, 0);
+  assert_size(v, 2);
+  assert_vector_values(v, (int[]){2, 1}, 2);
+  vec_destroy(&v);
+
+  // Test position 1 out of bounds
+  v = vec_create((int[]){1, 2, 3, 4, 5}, 5);
+  vec_swap(&v, 12, 1);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  assert_size(v, 5);
+  assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
+  errno = 0;
+
+  // Test position 1 negative
+  vec_swap(&v, -1, 1);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  assert_size(v, 5);
+  assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
+  errno = 0;
+
+  // Test position 2 out of bounds
+  vec_swap(&v, 2, 7);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  assert_size(v, 5);
+  assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
+  errno = 0;
+
+  // Test position 2 negative
+  vec_swap(&v, 3, -1);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  assert_size(v, 5);
+  assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
+  errno = 0;
+
+  // Test both positions out of bounds
+  vec_swap(&v, 12, 7);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  assert_size(v, 5);
+  assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
+  errno = 0;
+
+  // Test both positions negative
+  vec_swap(&v, -2, -1);
+  CU_ASSERT_EQUAL(errno, EINVAL);
+  assert_size(v, 5);
+  assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
+  errno = 0;
+
+  // Test same position
+  vec_swap(&v, 2, 2);
+  assert_size(v, 5);
+  assert_vector_values(v, (int[]){1, 2, 3, 4, 5}, 5);
+
+  // Test end to end
+  vec_swap(&v, 0, 4);
+  assert_size(v, 5);
+  assert_vector_values(v, (int[]){5, 2, 3, 4, 1}, 5);
+
+  // Test adjacent elements at the start
+  vec_swap(&v, 0, 1);
+  assert_size(v, 5);
+  assert_vector_values(v, (int[]){2, 5, 3, 4, 1}, 5);
+
+  // Test adjacent elements at the end
+  vec_swap(&v, 3, 4);
+  assert_size(v, 5);
+  assert_vector_values(v, (int[]){2, 5, 3, 1, 4}, 5);
+
+  // Expected tests
+  vec_swap(&v, 0, 2);
+  assert_size(v, 5);
+  assert_vector_values(v, (int[]){3, 5, 2, 1, 4}, 5);
+
+  vec_swap(&v, 3, 1);
+  assert_size(v, 5);
+  assert_vector_values(v, (int[]){3, 1, 2, 5, 4}, 5);
+
+  vec_destroy(&v);
+}
 
 int main(int argc, char *argv[])
 {
