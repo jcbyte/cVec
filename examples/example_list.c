@@ -4,10 +4,10 @@
 
 int main()
 {
-  // create a list with pre-initialised values
+  // Create a list with pre-initialised values
   List l = lst_create((int[]){10, 20, 40}, 3);
 
-  // add elements to the list
+  // Add elements to the list
   lst_push_back(&l, 50);
   lst_insert(&l, 30, 2);
 
@@ -44,6 +44,7 @@ int main()
   lst_print(l);
   printf("\n\n");
 
+  // Clean up resources used by the list
   lst_destroy(&l);
   return 0;
 }
