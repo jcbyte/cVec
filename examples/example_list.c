@@ -5,7 +5,7 @@
 int main()
 {
   // create a list with pre-initialised values
-  List l = lst_create((int[]) {10, 20, 40}, 3);
+  List l = lst_create((int[]){10, 20, 40}, 3);
 
   // add elements to the list
   lst_push_back(&l, 50);
@@ -43,7 +43,7 @@ int main()
   lst_swap(&l, 0, 2);
   lst_print(l);
   printf("\n\n");
-  
+
   lst_destroy(&l);
   return 0;
 }
