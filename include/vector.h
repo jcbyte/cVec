@@ -1,8 +1,8 @@
 #pragma once
 
-#pragma once
-
 #include <stdlib.h>
+
+// todo document
 
 typedef struct Vector
 {
