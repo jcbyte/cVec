@@ -54,13 +54,18 @@ void test_push_front(void)
   // Expected tests
   Vector v = vec_create_empty();
 
-  vec_push_front(&v, 2);
+  vec_push_front(&v, 4);
   assert_size(v, 1);
-  assert_vector_values(v, (int[]){2}, 1);
+  assert_vector_values(v, (int[]){4}, 1);
 
-  vec_push_front(&v, 1);
+  vec_push_front(&v, 3);
   assert_size(v, 2);
-  assert_vector_values(v, (int[]){1, 2}, 2);
+  assert_vector_values(v, (int[]){3, 4}, 2);
+
+  vec_push_front(&v, 2);
+  vec_push_front(&v, 1);
+  assert_size(v, 4);
+  assert_vector_values(v, (int[]){1, 2, 3, 4}, 4);
 
   vec_destroy(&v);
 }
