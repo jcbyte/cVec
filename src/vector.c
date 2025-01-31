@@ -131,9 +131,17 @@ int vec_pop_back(Vector *vec)
 // todo implementation
 int vec_remove(Vector *vec, int value) {}
 
-// todo implementation
 int vec_remove_at(Vector *vec, size_t position) {
-  
+    if (position < 0 || vec->size <= position)
+  {
+    errno = EINVAL;
+    return -1; // Note: -1 could also be returned on success
+  }
+
+  int value = vec->_arr[position];
+  vec->size--;
+  memmove(vec->_arr + position, vec->_arr + position + 1, sizeof(int) * (vec->size - position));
+  return value;
 }
 
 int vec_at(Vector vec, size_t position)
