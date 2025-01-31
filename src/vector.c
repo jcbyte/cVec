@@ -27,12 +27,31 @@ int vec_pop_back(Vector *vec) {}
 int vec_remove(Vector *vec, int value) {}
 int vec_remove_at(Vector *vec, size_t position) {}
 int vec_at(Vector vec, size_t position) {}
-void vec_print(Vector vec) {}
+
+void vec_print(Vector vec) {
+  if (vec_empty(vec))
+  {
+    printf("[]");
+    return;
+  }
+
+  printf("[");
+  for (int i = 0; i < vec.size - 1; i++)
+  {
+    printf("%d, ", vec._arr[i]);
+  }
+  printf("%d]", vec._arr[vec.size - 1]);
+}
+
 void vec_clear(Vector *vec) {}
 int vec_front(Vector vec) {}
 int vec_end(Vector vec) {}
 size_t vec_size(Vector vec) {}
 size_t vec_capacity(Vector vec) {}
 void vec_shrink_to_fit(Vector *vec) {}
-int vec_empty(Vector vec) {}
+
+int vec_empty(Vector vec) {
+  return vec.size == 0;
+}
+
 void vec_swap(Vector *vec, size_t position1, size_t position2) {}

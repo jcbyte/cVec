@@ -7,6 +7,6 @@ int main()
 {
   // Vector v = vec_create_empty();
   Vector v = vec_create((int[]){10, 20, 40}, 3);
-
+  vec_print(v);
   return 0;
 }
