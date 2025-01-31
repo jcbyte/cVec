@@ -91,7 +91,7 @@ int lst_pop_back(List *lst);
  * @param lst Pointer to the list.
  * @param value The value to remove.
  *
- * @return The value of the removed element.
+ * @return True if the value was found and removed.
  */
 int lst_remove(List *lst, int value);
 
@@ -161,7 +161,7 @@ size_t lst_size(List lst);
  *
  * @param lst The list.
  *
- * @return 1 if the list is empty, 0 otherwise.
+ * @return True if the list is empty.
  */
 int lst_empty(List lst);
 
