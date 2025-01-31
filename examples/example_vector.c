@@ -14,7 +14,7 @@ int main()
   vec_print(v);
   vec_push_back(&v, 3);
   vec_print(v);
-  int a = vec_pop_back(&v);
+  vec_swap(&v, 0, 2);
   vec_print(v);
 
   printf("\n\n");

@@ -146,5 +146,19 @@ int vec_empty(Vector vec)
   return vec.size == 0;
 }
 
-// todo implementation
-void vec_swap(Vector *vec, size_t position1, size_t position2) {}
+void vec_swap(Vector *vec, size_t position1, size_t position2) {
+  if (position1 == position2)
+  {
+    return;
+  }
+
+  if (position1 < 0 || vec->size <= position1 || position2 < 0 || vec->size <= position2)
+  {
+    errno = EINVAL;
+    return;
+  }
+
+  int temp = vec->_arr[position1];
+  vec->_arr[position1] = vec->_arr[position2];
+  vec->_arr[position2] = temp;
+}
