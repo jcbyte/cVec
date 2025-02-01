@@ -49,9 +49,9 @@ for file in "${files[@]}"; do
     fi
     test_report="$OUTPUT_DIR/${test_name}-Results.xml"
     # Prettify the test results
-    xsltproc cunit-report.xsl $test_report > "$OUTPUT_DIR/test-reports/$test_name-report.html"
+    xsltproc tests_report_format/cunit-report.xsl $test_report > "$OUTPUT_DIR/test-reports/$test_name-report.html"
     # Prettify valgrind results
-    xsltproc valgrind-report.xsl $valgrind_report > "$OUTPUT_DIR/valgrind-reports/$test_name-valgrind-report.html"
+    xsltproc tests_report_format/valgrind-report.xsl $valgrind_report > "$OUTPUT_DIR/valgrind-reports/$test_name-valgrind-report.html"
 done
 
 # Generate coverage information
