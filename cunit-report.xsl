@@ -70,31 +70,31 @@
           </xsl:for-each >
         </div>
 
- <!-- todo list failed tests -->
-        <!-- Test Suite Listing -->
-        <h2>Test Suites</h2>
-        <table>
-          <tr>
-            <th>Suite Name</th>
-            <th>Test Cases</th>
-          </tr>
-          <xsl:for-each select="//CUNIT_RUN_SUITE">
-            <tr>
-              <td>
-                <xsl:value-of select="CUNIT_RUN_SUITE_SUCCESS/SUITE_NAME" />
-              </td>
-              <td>
-                <ul>
-                  <xsl:for-each select="CUNIT_RUN_SUITE_SUCCESS/CUNIT_RUN_TEST_RECORD">
-                    <li>
-                      <xsl:value-of select="CUNIT_RUN_TEST_SUCCESS/TEST_NAME" />
-                    </li>
-                  </xsl:for-each>
-                </ul>
-              </td>
-            </tr>
-          </xsl:for-each>
-        </table>
+        <h2>Failed Tests:</h2>
+        <xsl:choose>
+          <xsl:when test="CUNIT_RESULT_LISTING/CUNIT_RUN_SUITE/CUNIT_RUN_SUITE_SUCCESS/CUNIT_RUN_TEST_RECORD/CUNIT_RUN_TEST_FAILURE">
+            <ul style="color: red">
+              <xsl:for-each select="CUNIT_RESULT_LISTING/CUNIT_RUN_SUITE/CUNIT_RUN_SUITE_SUCCESS/CUNIT_RUN_TEST_RECORD/CUNIT_RUN_TEST_FAILURE">
+                <li style="margin-bottom: 15px;">
+                  <div>
+                    Test <strong><xsl:value-of select="TEST_NAME" /></strong> from Suite <xsl:value-of select="../../SUITE_NAME" />
+                  </div>
+                  <div>
+                    <xsl:value-of select="CONDITION" /> in <strong><xsl:value-of select="FILE_NAME" /></strong> on line <strong><xsl:value-of select="LINE_NUMBER" /></strong>
+                  </div>
+                </li>
+              </xsl:for-each>
+            </ul>
+          </xsl:when>
+          <xsl:otherwise>
+            <p style="color: green;">
+              <strong>No test failures.</strong>
+            </p>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <h2>CUnit Details</h2>
+        <xsl:value-of select="CUNIT_FOOTER" />
 
       </body>
     </html>
