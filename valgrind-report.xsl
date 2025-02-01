@@ -1,54 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-    
-    <!-- Template for the root element -->
-    <xsl:template match="/">
-        <html>
-            <head>
-                <title>Valgrind Memory Report</title>
-                <style>
-                    body { font-family: Arial, sans-serif; margin: 20px; }
-                    h1 { color: #333; }
-                    .error { margin-bottom: 20px; padding: 10px; border: 1px solid #ddd; background-color: #f9f9f9; }
-                    .stacktrace { font-family: Courier, monospace; background-color: #f0f0f0; padding: 10px; margin-top: 10px; }
-                    .frame { margin-bottom: 5px; }
-                </style>
-            </head>
-            <body>
-                <h1>Valgrind Memory Report</h1>
-                
-                <!-- Preamble Section -->
-                <h2>Preamble</h2>
-                <ul>
-                    <xsl:for-each select="valgrindoutput/preamble/line">
-                        <li><xsl:value-of select="."/></li>
-                    </xsl:for-each>
-                </ul>
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:output method="html" indent="yes" />
 
-                <h2>Memory Errors</h2>
-                <xsl:apply-templates select="//error"/>
-
-            </body>
-        </html>
-    </xsl:template>
-
-    <!-- Template for each error -->
-    <xsl:template match="error">
-        <div class="error">
-            <h3>Error Type: <xsl:value-of select="kind"/></h3>
-            <p><strong>Details:</strong> <xsl:value-of select="xwhat/text"/></p>
-            <p><strong>Leaked Bytes:</strong> <xsl:value-of select="xwhat/leakedbytes"/> bytes</p>
-            <p><strong>Leaked Blocks:</strong> <xsl:value-of select="xwhat/leakedblocks"/> block(s)</p>
-            <h4>Stack Trace:</h4>
-            <div class="stacktrace">
-                <xsl:for-each select="stack/frame">
-                    <div class="frame">
-                        <p><strong>Function:</strong> <xsl:value-of select="fn"/> (<xsl:value-of select="file"/>, Line: <xsl:value-of select="line"/>)</p>
-                        <p><strong>Object:</strong> <xsl:value-of select="obj"/> (IP: <xsl:value-of select="ip"/>)</p>
-                    </div>
-                </xsl:for-each>
-            </div>
+  <xsl:template match="/valgrindoutput">
+    <html>
+      <head>
+        <title>Valgrind Report</title>
+        <style>
+          body { font-family: Arial, sans-serif; }
+        </style>
+      </head>
+      <body>
+        <h1>Valgrind Report</h1>
+        <div>
+          <xsl:value-of select="args/argv/exe" />
         </div>
-    </xsl:template>
 
+        <h2>Status</h2>
+        <ol>
+          <xsl:apply-templates select="status" />
+        </ol>
+
+        <h2>Errors</h2>
+        <xsl:choose>
+          <xsl:when test="error">
+            <ul style="color: red">
+              <xsl:apply-templates select="error" />
+            </ul>
+          </xsl:when>
+          <xsl:otherwise>
+            <p style="color: green;">
+              <strong>No errors found.</strong>
+            </p>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <h2>Valgrind Details</h2>
+        <xsl:apply-templates select="preamble" />
+      </body>
+    </html>
+  </xsl:template>
+
+  <xsl:template match="status">
+    <li>
+      <strong><xsl:value-of select="state" /></strong> - <xsl:value-of select="time" />
+    </li>
+  </xsl:template>
+
+  <xsl:template match="error">
+    <li style="margin-bottom: 25px;">
+      <div>
+        <strong><xsl:value-of select="kind" /></strong>
+      </div>
+      <div>
+        <xsl:value-of select="xwhat/text" />
+      </div>
+      <div style="margin-bottom: 5px;">Trace:</div>
+      <div style="margin-left: 20px;">
+        <xsl:apply-templates select="stack" />
+      </div>
+    </li>
+  </xsl:template>
+
+  <xsl:template match="stack">
+    <xsl:for-each select="frame[fn and dir and file and line]">
+      <div>
+        <strong><xsl:value-of select="fn" /></strong> in <xsl:value-of select="dir" />/<strong><xsl:value-of select="file" /></strong> on line <strong>
+      <xsl:value-of select="line" />
+    </strong>
+  </div>
+</xsl:for-each>
+
+</xsl:template>
+
+<xsl:template match="preamble">
+<xsl:for-each select="line">
+  <div>
+    <xsl:value-of select="." />
+  </div>
+</xsl:for-each>
+</xsl:template>
 </xsl:stylesheet>
