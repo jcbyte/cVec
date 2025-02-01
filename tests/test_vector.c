@@ -591,7 +591,7 @@ int main(int argc, char *argv[])
       (CU_add_test(suite_remove, "Test pop_back", test_pop_back) == NULL) ||
       (CU_add_test(suite_remove, "Test remove", test_remove) == NULL) ||
       (CU_add_test(suite_remove, "Test remove_at", test_remove_at) == NULL) |
-          (CU_add_test(suite_util, "Test at", test_at) == NULL) ||
+      (CU_add_test(suite_util, "Test at", test_at) == NULL) ||
       (CU_add_test(suite_util, "Test print", test_print) == NULL) ||
       (CU_add_test(suite_util, "Test clear", test_clear) == NULL) ||
       (CU_add_test(suite_util, "Test front", test_front) == NULL) ||
