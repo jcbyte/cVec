@@ -1,8 +1,6 @@
 # cVec
 
-This project provides a basic implementation of a dynamic array (vector) singly linked list (list) in C.
-
-Fully implemented testing and CI using GitHub actions.
+C library implementing a dynamic array (vector) and a singly linked list, complete with unit testing and CI/CD.
 
 ## Installation
 
