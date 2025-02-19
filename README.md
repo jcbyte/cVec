@@ -43,6 +43,6 @@ sudo apt install gcc libcunit1-dev valgrind xsltproc lcov
 - Code coverage report:  
   `./build/coverage-report/`
 
-## Authors
+## Licence
 
-- [@jcbyte](https://www.github.com/jcbyte)
+[Apache License 2.0](LICENSE)
